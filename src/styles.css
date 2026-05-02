@@ -1,0 +1,74 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0a0d;
+  --bg-elevated: rgba(24, 20, 30, 0.82);
+  --bg-panel: rgba(16, 13, 20, 0.92);
+  --text: #f6eedf;
+  --muted: #c7bda8;
+  --soft: #8f8574;
+  --line: rgba(250, 239, 214, 0.12);
+  --accent: #ff7a59;
+  --accent-2: #6be3ff;
+  --accent-3: #d8ff62;
+  --accent-4: #ff5fd2;
+  --focus: #fff38a;
+  --shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+  --hero-font: 'Georgia', 'Iowan Old Style', 'Times New Roman', serif;
+  --body-font: 'Avenir Next', 'Segoe UI', sans-serif;
+  --mono-font: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+  font-family: var(--body-font);
+  line-height: 1.45;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme='paper'] {
+  color-scheme: light;
+  --bg: #f3ede2;
+  --bg-elevated: rgba(255, 251, 244, 0.86);
+  --bg-panel: rgba(255, 248, 239, 0.95);
+  --text: #151111;
+  --muted: #4d4338;
+  --soft: #7a6d5e;
+  --line: rgba(40, 26, 17, 0.12);
+  --accent: #b53d22;
+  --accent-2: #005f8f;
+  --accent-3: #596f00;
+  --accent-4: #9d256f;
+  --focus: #3c2eff;
+  --shadow: 0 30px 80px rgba(70, 48, 24, 0.16);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top, rgba(255, 122, 89, 0.16), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(107, 227, 255, 0.18), transparent 25%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%),
+    var(--bg);
+  color: var(--text);
+}
+button, input, select, textarea { font: inherit; }
+a { color: inherit; }
+button { cursor: pointer; }
+canvas, svg { display: block; max-width: 100%; }
+#root { min-height: 100svh; }
+
+::selection { background: rgba(255, 122, 89, 0.35); }
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.demo-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.demo-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
