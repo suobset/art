@@ -74,18 +74,18 @@ export function GenerativePoetryDemo() {
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setRevision((value) => value + 1)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setRevision((value) => value + 1)} className="control-button">
               regenerate
             </button>
-            <button type="button" onClick={() => setLocks([])} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setLocks([])} className="control-button">
               reset locks
             </button>
-            <button type="button" onClick={() => setShowGrammar((value) => !value)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setShowGrammar((value) => !value)} className="control-button">
               {showGrammar ? 'hide grammar' : 'reveal grammar'}
             </button>
           </div>
           <Parameter label="mood">
-            <select value={mood} onChange={(event) => setMood(event.target.value as Mood)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={mood} onChange={(event) => setMood(event.target.value as Mood)} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               <option value="tender" className="bg-[#120f15]">tender</option>
               <option value="electric" className="bg-[#120f15]">electric</option>
               <option value="grave" className="bg-[#120f15]">grave</option>

@@ -70,19 +70,19 @@ export function SourceRemixDemo() {
                 setError('')
                 setApplied(source)
               }}
-              className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]"
+              className="control-button"
             >
               apply
             </button>
-            <button type="button" onClick={() => { setSource(defaultSource); setApplied(defaultSource); setError('') }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setSource(defaultSource); setApplied(defaultSource); setError('') }} className="control-button">
               reset
             </button>
-            <button type="button" onClick={() => setSource((current) => mutate(current))} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setSource((current) => mutate(current))} className="control-button">
               random safe mutation
             </button>
           </div>
           <Parameter label="editable constants">
-            <textarea value={source} onChange={(event) => setSource(event.target.value)} rows={8} className="rounded-xl border border-[var(--line)] bg-black/20 px-3 py-2 font-[var(--mono-font)] text-xs" />
+            <textarea value={source} onChange={(event) => setSource(event.target.value)} rows={8} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/20 px-3 py-2 font-[var(--mono-font)] text-xs text-[var(--text)]" />
           </Parameter>
           <p className="text-sm text-[var(--soft)]">Invalid edits are handled gently. The artwork changes only when the tiny source passes the parser.</p>
           {error ? <p className="rounded-xl border border-[var(--accent)] bg-[rgba(255,122,89,0.12)] px-3 py-2 text-sm text-[var(--text)]">{error}</p> : null}

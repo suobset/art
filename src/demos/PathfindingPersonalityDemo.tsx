@@ -141,21 +141,21 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setPlaying((value) => !value)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setPlaying((value) => !value)} className="control-button">
               {playing ? 'pause' : 'run'}
             </button>
-            <button type="button" onClick={() => setStepIndex((index) => index + 1)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setStepIndex((index) => index + 1)} className="control-button">
               step
             </button>
-            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStepIndex(0) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStepIndex(0) }} className="control-button">
               regenerate maze
             </button>
-            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStart({ x: 1, y: 1 }); setEnd({ x: columns - 2, y: rows - 2 }); setStepIndex(0) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStart({ x: 1, y: 1 }); setEnd({ x: columns - 2, y: rows - 2 }); setStepIndex(0) }} className="control-button">
               reset
             </button>
           </div>
           <Parameter label="algorithm">
-            <select value={algorithm} onChange={(event) => { setAlgorithm(event.target.value as Algorithm); setStepIndex(0) }} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={algorithm} onChange={(event) => { setAlgorithm(event.target.value as Algorithm); setStepIndex(0) }} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               <option value="bfs" className="bg-[#120f15]">bfs</option>
               <option value="dfs" className="bg-[#120f15]">dfs</option>
               <option value="dijkstra" className="bg-[#120f15]">dijkstra</option>

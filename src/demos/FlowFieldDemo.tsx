@@ -124,7 +124,7 @@ export function FlowFieldDemo({ reducedMotion }: DemoComponentProps) {
                 setTrailFade(defaults.trailFade)
                 setMood(defaults.mood)
               }}
-              className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]"
+              className="control-button"
             >
               reset
             </button>
@@ -143,7 +143,7 @@ export function FlowFieldDemo({ reducedMotion }: DemoComponentProps) {
             <input type="range" min="0.04" max="0.35" step="0.01" value={trailFade} onChange={(event) => setTrailFade(Number(event.target.value))} />
           </Parameter>
           <Parameter label="color mood">
-            <select value={mood} onChange={(event) => setMood(event.target.value as PaletteName)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={mood} onChange={(event) => setMood(event.target.value as PaletteName)} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               {moods.map((option) => (
                 <option key={option} value={option} className="bg-[#120f15]">
                   {option}

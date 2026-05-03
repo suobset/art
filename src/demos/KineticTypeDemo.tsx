@@ -20,7 +20,7 @@ export function KineticTypeDemo({ reducedMotion }: DemoComponentProps) {
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setPaused((value) => !value)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setPaused((value) => !value)} className="control-button">
               {paused ? 'resume' : 'pause'}
             </button>
             <button
@@ -32,13 +32,13 @@ export function KineticTypeDemo({ reducedMotion }: DemoComponentProps) {
                 setSpacing(1)
                 setMotionIntensity(0.7)
               }}
-              className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]"
+              className="control-button"
             >
               reset
             </button>
           </div>
           <Parameter label="phrase">
-            <input value={phrase} onChange={(event) => setPhrase(event.target.value.slice(0, 28))} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2" />
+            <input value={phrase} onChange={(event) => setPhrase(event.target.value.slice(0, 28))} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]" />
           </Parameter>
           <Parameter label="gravity" value={gravity.toFixed(2)}>
             <input type="range" min="0" max="1" step="0.05" value={gravity} onChange={(event) => setGravity(Number(event.target.value))} />

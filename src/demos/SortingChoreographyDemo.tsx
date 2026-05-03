@@ -146,21 +146,21 @@ export function SortingChoreographyDemo({ reducedMotion }: DemoComponentProps) {
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setPlaying((value) => !value)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setPlaying((value) => !value)} className="control-button">
               {playing ? 'pause' : 'play'}
             </button>
-            <button type="button" onClick={() => setStepIndex((index) => Math.min(index + 1, steps.length - 1))} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setStepIndex((index) => Math.min(index + 1, steps.length - 1))} className="control-button">
               step
             </button>
-            <button type="button" onClick={() => { setBaseValues(createValues()); setStepIndex(0) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setBaseValues(createValues()); setStepIndex(0) }} className="control-button">
               shuffle
             </button>
-            <button type="button" onClick={() => { setBaseValues(createValues()); setStepIndex(0); setPlaying(true) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setBaseValues(createValues()); setStepIndex(0); setPlaying(true) }} className="control-button">
               reset
             </button>
           </div>
           <Parameter label="algorithm">
-            <select value={algorithm} onChange={(event) => { setAlgorithm(event.target.value as Algorithm); setStepIndex(0) }} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={algorithm} onChange={(event) => { setAlgorithm(event.target.value as Algorithm); setStepIndex(0) }} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               <option value="bubble" className="bg-[#120f15]">bubble</option>
               <option value="insertion" className="bg-[#120f15]">insertion</option>
               <option value="quicksort" className="bg-[#120f15]">quicksort</option>
@@ -171,7 +171,7 @@ export function SortingChoreographyDemo({ reducedMotion }: DemoComponentProps) {
             <input type="range" min="80" max="500" step="20" value={tempo} onChange={(event) => setTempo(Number(event.target.value))} />
           </Parameter>
           <Parameter label="color mode">
-            <button type="button" onClick={() => setColorMode((mode) => (mode === 'value' ? 'movement' : 'value'))} className="rounded-xl border border-[var(--line)] px-3 py-2 text-left">
+            <button type="button" onClick={() => setColorMode((mode) => (mode === 'value' ? 'movement' : 'value'))} className="control-button w-full justify-start">
               {colorMode === 'value' ? 'color by value' : 'color by movement'}
             </button>
           </Parameter>

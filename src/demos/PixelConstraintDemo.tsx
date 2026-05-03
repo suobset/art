@@ -66,10 +66,10 @@ export function PixelConstraintDemo() {
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setGrid(makeGrid())} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setGrid(makeGrid())} className="control-button">
               reset
             </button>
-            <button type="button" onClick={mutate} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={mutate} className="control-button">
               random mutation
             </button>
             <button
@@ -82,13 +82,13 @@ export function PixelConstraintDemo() {
                   setCopyMessage('clipboard unavailable: copy from the text panel below')
                 }
               }}
-              className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]"
+              className="control-button"
             >
               export as ascii
             </button>
           </div>
           <Parameter label="palette">
-            <select value={palette} onChange={(event) => setPalette(event.target.value as PaletteName)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={palette} onChange={(event) => setPalette(event.target.value as PaletteName)} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               {Object.keys(palettes).map((name) => (
                 <option key={name} value={name} className="bg-[#120f15]">
                   {name}
@@ -100,12 +100,12 @@ export function PixelConstraintDemo() {
             <input type="range" min="1" max="3" step="1" value={brushSize} onChange={(event) => setBrushSize(Number(event.target.value))} />
           </Parameter>
           <Parameter label="mirror mode">
-            <button type="button" onClick={() => setMirror((value) => !value)} className="rounded-xl border border-[var(--line)] px-3 py-2 text-left">
+            <button type="button" onClick={() => setMirror((value) => !value)} className="control-button w-full justify-start">
               {mirror ? 'horizontal symmetry on' : 'horizontal symmetry off'}
             </button>
           </Parameter>
           <Parameter label="show data representation">
-            <button type="button" onClick={() => setShowData((value) => !value)} className="rounded-xl border border-[var(--line)] px-3 py-2 text-left">
+            <button type="button" onClick={() => setShowData((value) => !value)} className="control-button w-full justify-start">
               {showData ? 'hide raw grid' : 'show raw grid'}
             </button>
           </Parameter>

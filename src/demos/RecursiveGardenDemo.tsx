@@ -65,7 +65,7 @@ export function RecursiveGardenDemo({ reducedMotion }: DemoComponentProps) {
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => { setBranchingAngle(0.38); setDepth(7); setAsymmetry(0.25); setLeafDensity(0.7); setWind(0.2); setSeason('summer') }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setBranchingAngle(0.38); setDepth(7); setAsymmetry(0.25); setLeafDensity(0.7); setWind(0.2); setSeason('summer') }} className="control-button">
               reset
             </button>
             <SeedControls seed={seed} onRandomize={remix} />
@@ -86,7 +86,7 @@ export function RecursiveGardenDemo({ reducedMotion }: DemoComponentProps) {
             <input type="range" min="0" max="1" step="0.05" value={wind} onChange={(event) => setWind(Number(event.target.value))} />
           </Parameter>
           <Parameter label="season">
-            <select value={season} onChange={(event) => setSeason(event.target.value as Season)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={season} onChange={(event) => setSeason(event.target.value as Season)} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               <option value="spring" className="bg-[#120f15]">spring</option>
               <option value="summer" className="bg-[#120f15]">summer</option>
               <option value="autumn" className="bg-[#120f15]">autumn</option>

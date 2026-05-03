@@ -62,10 +62,10 @@ export function ShaderWithoutShadersDemo({ reducedMotion }: DemoComponentProps) 
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setAnimate((value) => !value)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setAnimate((value) => !value)} className="control-button">
               {animate ? 'pause' : 'animate'}
             </button>
-            <button type="button" onClick={() => setPhase((value) => value + 0.35)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setPhase((value) => value + 0.35)} className="control-button">
               freeze frame
             </button>
             <SeedControls seed={seed} onRandomize={remix} />
@@ -77,7 +77,7 @@ export function ShaderWithoutShadersDemo({ reducedMotion }: DemoComponentProps) 
             <input type="range" min="0" max="6.3" step="0.1" value={phase} onChange={(event) => setPhase(Number(event.target.value))} />
           </Parameter>
           <Parameter label="palette">
-            <select value={palette} onChange={(event) => setPalette(event.target.value as PaletteName)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={palette} onChange={(event) => setPalette(event.target.value as PaletteName)} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]">
               {moods.map((option) => (
                 <option key={option} value={option} className="bg-[#120f15]">
                   {option}

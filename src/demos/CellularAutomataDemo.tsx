@@ -87,16 +87,16 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
       actions={
         <>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setPlaying((value) => !value)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setPlaying((value) => !value)} className="control-button">
               {playing ? 'pause' : 'run'}
             </button>
-            <button type="button" onClick={step} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={step} className="control-button">
               step one generation
             </button>
-            <button type="button" onClick={() => setWorld(randomWorld())} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setWorld(randomWorld())} className="control-button">
               randomize world
             </button>
-            <button type="button" onClick={() => setWorld(makeWorld())} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => setWorld(makeWorld())} className="control-button">
               reset
             </button>
           </div>
@@ -109,7 +109,7 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
                 setBirth(presets[value].birth)
                 setSurvival(presets[value].survival)
               }}
-              className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2"
+              className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]"
             >
               {Object.keys(presets).map((name) => (
                 <option key={name} value={name} className="bg-[#120f15]">
@@ -119,10 +119,10 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
             </select>
           </Parameter>
           <Parameter label="birth values">
-            <input value={birth} onChange={(event) => setBirth(event.target.value.replace(/[^0-8]/g, ''))} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2" />
+            <input value={birth} onChange={(event) => setBirth(event.target.value.replace(/[^0-8]/g, ''))} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]" />
           </Parameter>
           <Parameter label="survival values">
-            <input value={survival} onChange={(event) => setSurvival(event.target.value.replace(/[^0-8]/g, ''))} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2" />
+            <input value={survival} onChange={(event) => setSurvival(event.target.value.replace(/[^0-8]/g, ''))} className="w-full rounded-[0.8rem] border border-[var(--rule-strong)] bg-black/10 px-3 py-2 text-[var(--text)]" />
           </Parameter>
           <Parameter label="speed" value={`${speed}ms`}>
             <input type="range" min="60" max="500" step="20" value={speed} onChange={(event) => setSpeed(Number(event.target.value))} />
@@ -131,7 +131,7 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
             <input type="range" min="10" max="22" step="1" value={cellSize} onChange={(event) => setCellSize(Number(event.target.value))} />
           </Parameter>
           <Parameter label="draw or erase">
-            <button type="button" onClick={() => setDrawMode((value) => (value === 1 ? 0 : 1))} className="rounded-xl border border-[var(--line)] px-3 py-2 text-left">
+            <button type="button" onClick={() => setDrawMode((value) => (value === 1 ? 0 : 1))} className="control-button w-full justify-start">
               {drawMode === 1 ? 'drawing live cells' : 'erasing cells'}
             </button>
           </Parameter>
