@@ -23,6 +23,7 @@ function exportAscii(grid: number[][]) {
 }
 
 export function PixelConstraintDemo() {
+  const [copyMessage, setCopyMessage] = useState('')
   const [grid, setGrid] = useState<number[][]>(() => makeGrid())
   const [palette, setPalette] = useState<PaletteName>('dusk')
   const [brushSize, setBrushSize] = useState(1)
@@ -71,7 +72,18 @@ export function PixelConstraintDemo() {
             <button type="button" onClick={mutate} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               random mutation
             </button>
-            <button type="button" onClick={() => navigator.clipboard.writeText(ascii)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(ascii)
+                  setCopyMessage('ascii copied to clipboard')
+                } catch {
+                  setCopyMessage('clipboard unavailable: copy from the text panel below')
+                }
+              }}
+              className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]"
+            >
               export as ascii
             </button>
           </div>
@@ -98,6 +110,7 @@ export function PixelConstraintDemo() {
             </button>
           </Parameter>
           <p className="text-sm text-[var(--soft)]">Canvas description: a 32 by 18 grid that turns small numbers into a picture. Each cell is keyboard focusable.</p>
+          {copyMessage ? <p className="text-sm text-[var(--soft)]">{copyMessage}</p> : null}
         </>
       }
     >
