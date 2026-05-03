@@ -33,13 +33,14 @@ export function ShaderWithoutShadersDemo({ reducedMotion }: DemoComponentProps) 
       if (!canvas) return
       const width = Math.max(size.width - 12, 280)
       const height = 340
+      const block = width < 420 ? Math.max(resolution, 10) : resolution
       const context = setupHiDpiCanvas(canvas, width, height)
       if (!context) return
       const time = reducedMotion || !animate ? phase : phase + elapsed * 0.0005
       context.clearRect(0, 0, width, height)
 
-      for (let y = 0; y < height; y += resolution) {
-        for (let x = 0; x < width; x += resolution) {
+      for (let y = 0; y < height; y += block) {
+        for (let x = 0; x < width; x += block) {
           const nx = x / width - 0.5
           const ny = y / height - 0.5
           const radius = Math.hypot(nx + pointerRef.current.x - 0.5, ny + pointerRef.current.y - 0.5)
@@ -49,7 +50,7 @@ export function ShaderWithoutShadersDemo({ reducedMotion }: DemoComponentProps) 
           const brightness = clamp((wave + ripple + flare + 3) / 6, 0, 1)
           const colorIndex = Math.floor(brightness * (colors.length - 0.01))
           context.fillStyle = colors[colorIndex]
-          context.fillRect(x, y, resolution + 1, resolution + 1)
+          context.fillRect(x, y, block + 1, block + 1)
         }
       }
     },

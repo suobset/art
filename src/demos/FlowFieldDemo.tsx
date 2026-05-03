@@ -42,7 +42,8 @@ export function FlowFieldDemo({ reducedMotion }: DemoComponentProps) {
     const generator = createSeededRandom(seed)
     const width = Math.max(size.width - 12, 280)
     const height = 340
-    particlesRef.current = Array.from({ length: density }, () => ({
+    const particleCount = Math.min(density, Math.max(72, Math.floor(width / 3)))
+    particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: randomBetween(generator, 0, width),
       y: randomBetween(generator, 0, height),
       life: randomBetween(generator, 0, 1000),
