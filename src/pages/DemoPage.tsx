@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { DemoCard } from '../components/DemoCard'
 import { Footer } from '../components/Footer'
@@ -18,6 +19,10 @@ export function DemoPage({ reducedMotion }: DemoPageProps) {
   }
 
   const demo = demos[index]
+
+  useEffect(() => {
+    document.title = `${demo.title} - art + algorithms`
+  }, [demo.title])
   const previous = demos[(index - 1 + demos.length) % demos.length]
   const next = demos[(index + 1) % demos.length]
 

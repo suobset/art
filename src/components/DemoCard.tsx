@@ -1,16 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { DemoDefinition } from '../lib/demoTypes'
 import { BehindTheScenes } from './BehindTheScenes'
 
 export function DemoCard({ demo, reducedMotion, forceOpen = false }: { demo: DemoDefinition; reducedMotion: boolean; forceOpen?: boolean }) {
   const [open, setOpen] = useState(forceOpen)
   const DemoComponent = demo.component
-
-  useEffect(() => {
-    if (forceOpen) {
-      setOpen(true)
-    }
-  }, [forceOpen])
 
   return (
     <section id={demo.id} className="rounded-[2rem] border border-[var(--line)] bg-[var(--bg-elevated)] p-4 shadow-[var(--shadow)] md:p-6">

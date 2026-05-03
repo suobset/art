@@ -1,10 +1,12 @@
-# art
+# art + algorithms
 
-`art` is an open-source gallery for the claim that programming can become an art form when structure, behavior, constraint, timing, and meaning are chosen with expressive intent.
+`art + algorithms` is an open-source gallery for the claim that programming can become an art form when structure, behavior, constraint, timing, and meaning are chosen with expressive intent.
 
 ## Thesis
 
 A program can be useful, correct, expressive, playful, personal, beautiful, strange, political, precise, fragile, and alive.
+
+This version is curated by Kush S. and intended for `https://art.skushagra.com/`, with related writing on Declarative at `https://skushagra.com`.
 
 This site does not argue that all code is art. It argues that code can become a medium.
 
@@ -17,6 +19,7 @@ Screenshots placeholder:
 
 ## Features
 
+- A homepage built as a navigation threshold, with each demo on its own route
 - Ten interactive computational artworks
 - A shared demo registry for easy extension
 - A behind-the-scenes panel for every piece

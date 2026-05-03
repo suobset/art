@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Footer } from '../components/Footer'
 import { GalleryNav } from '../components/GalleryNav'
 import { Hero } from '../components/Hero'
@@ -11,6 +12,9 @@ type HomePageProps = {
 }
 
 export function HomePage({ reducedMotion }: HomePageProps) {
+  useEffect(() => {
+    document.title = 'art + algorithms'
+  }, [])
   return (
     <>
       <Hero manifesto={manifesto} author={author} reducedMotion={reducedMotion} />
