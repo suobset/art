@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# art
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+`art` is an open-source gallery for the claim that programming can become an art form when structure, behavior, constraint, timing, and meaning are chosen with expressive intent.
 
-Currently, two official plugins are available:
+## Thesis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+A program can be useful, correct, expressive, playful, personal, beautiful, strange, political, precise, fragile, and alive.
 
-## React Compiler
+This site does not argue that all code is art. It argues that code can become a medium.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Screenshots
 
-## Expanding the ESLint configuration
+Screenshots placeholder:
+- `docs/screenshot-hero.png`
+- `docs/screenshot-gallery.png`
+- `docs/screenshot-demos.png`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Ten interactive computational artworks
+- A shared demo registry for easy extension
+- A behind-the-scenes panel for every piece
+- Keyboard-accessible controls and pause points
+- Reduced-motion support and a manual motion toggle
+- Static deployment with Vite, React, TypeScript, and Tailwind CSS
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Demos
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `gesture` — flow field painting
+- `grid` — 32 by 18 pixel constraint editor
+- `choreography` — sorting as movement
+- `weather` — cellular automata playground
+- `poem` — local generative poetry engine
+- `garden` — recursive tree generator
+- `light` — shader-like arithmetic painting without WebGL
+- `type` — kinetic typography stage
+- `maze` — pathfinding personality playground
+- `source` — safe source remix editor
+
+## Local setup
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run lint
 ```
+
+## Project structure
+
+```txt
+.
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md
+├── index.html
+├── package.json
+├── src
+│   ├── App.tsx
+│   ├── components
+│   ├── content
+│   ├── demos
+│   ├── hooks
+│   ├── lib
+│   ├── main.tsx
+│   ├── styles.css
+│   └── index.css
+└── vite.config.ts
+```
+
+## How to add a demo
+
+1. Create a component in `src/demos`.
+2. Give it direct interaction, controls, reset, remix, and a pause-friendly path.
+3. Add accessible labels and a reduced-motion behavior.
+4. Register it in `src/demos/index.ts` with metadata and behind-the-scenes copy.
+5. Make sure the panel explains what the code is doing, where the artistic choice enters, and what to try next.
+
+## Accessibility notes
+
+- Controls use semantic form elements and buttons.
+- Every demo includes a textual description.
+- Motion can be reduced through system preference or the site toggle.
+- Demos expose keyboard alternatives for core interactions.
+- The site avoids flashing and strobing patterns.
+
+## Contribution notes
+
+See `CONTRIBUTING.md` for demo expectations, accessibility checks, performance checks, and commit style.
+
+## License
+
+Code is released under the MIT License in `LICENSE`.
+
+Written copy and demo concepts are also covered by the repository license for simplicity in this first version.
