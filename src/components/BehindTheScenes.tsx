@@ -2,8 +2,13 @@ import type { BehindTheScenesData } from '../lib/demoTypes'
 
 export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; whyArt: string }) {
   return (
-    <div className="grid gap-4 rounded-[1.5rem] border border-[var(--line)] bg-[var(--bg-panel)] p-4 text-sm text-[var(--muted)] md:grid-cols-[1.15fr_0.85fr] md:p-5">
+    <div className="surface-placard grid gap-4 px-4 py-4 text-sm text-[var(--text-muted)] md:grid-cols-[1.15fr_0.85fr] md:px-5 md:py-5">
       <div className="space-y-5">
+        <div className="flex items-center gap-3">
+          <span className="meta-label text-[var(--accent-2)]">source study</span>
+          <span className="h-px flex-1 bg-[var(--rule)]" />
+          <span className="font-[var(--mono-font)] text-[0.68rem] uppercase tracking-[0.18em] text-[var(--text-faint)]">annotated</span>
+        </div>
         <section>
           <h4 className="mb-2 text-base text-[var(--text)]">What you are seeing</h4>
           <p>{data.overview}</p>
@@ -22,7 +27,7 @@ export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; w
             href={data.sourceFile.href}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex rounded-full border border-[var(--line)] px-3 py-2 text-xs text-[var(--text)] transition hover:border-[var(--accent-2)]"
+            className="control-button inline-flex"
           >
             {data.sourceFile.label}
           </a>
@@ -30,20 +35,23 @@ export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; w
         <section>
           <h4 className="mb-2 text-base text-[var(--text)]">Code walkthrough</h4>
           <div className="space-y-4">
-            {data.snippets.map((snippet) => (
-              <article key={snippet.title} className="rounded-[1.25rem] border border-[var(--line)] bg-black/20 p-3">
-                <h5 className="mb-2 text-sm font-medium text-[var(--text)]">{snippet.title}</h5>
-                <pre className="overflow-x-auto rounded-2xl bg-black/35 p-4 font-[var(--mono-font)] text-xs text-[var(--accent-3)]">
+            {data.snippets.map((snippet, index) => (
+              <article key={snippet.title} className="surface-note px-3 py-3">
+                <div className="mb-2 flex items-center gap-3">
+                  <span className="font-[var(--mono-font)] text-[0.68rem] uppercase tracking-[0.18em] text-[var(--accent-2)]">snippet {String(index + 1).padStart(2, '0')}</span>
+                  <h5 className="text-sm font-medium text-[var(--text)]">{snippet.title}</h5>
+                </div>
+                <pre className="overflow-x-auto rounded-[0.8rem] border border-[var(--rule)] bg-[var(--surface-strong)] p-4 font-[var(--mono-font)] text-xs leading-relaxed text-[var(--accent-3)]">
                   <code>{snippet.code}</code>
                 </pre>
-                <p className="mt-3 text-xs leading-relaxed text-[var(--soft)]">{snippet.note}</p>
+                <p className="mt-3 text-xs leading-relaxed text-[var(--text-faint)]">{snippet.note}</p>
               </article>
             ))}
           </div>
         </section>
       </div>
       <div className="space-y-5">
-        <section>
+        <section className="surface-note px-4 py-4">
           <h4 className="mb-2 text-base text-[var(--text)]">Important parameters</h4>
           <ul className="space-y-2">
             {data.parameters.map((parameter) => (
@@ -54,7 +62,7 @@ export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; w
           </ul>
         </section>
         {data.distinctions?.length ? (
-          <section>
+          <section className="surface-note px-4 py-4">
             <h4 className="mb-2 text-base text-[var(--text)]">Important distinctions</h4>
             <ul className="list-disc space-y-1 pl-5">
               {data.distinctions.map((item) => (
@@ -63,7 +71,7 @@ export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; w
             </ul>
           </section>
         ) : null}
-        <section>
+        <section className="surface-note px-4 py-4">
           <h4 className="mb-2 text-base text-[var(--text)]">Try changing this</h4>
           <ul className="list-disc space-y-1 pl-5">
             {data.tryThis.map((item) => (
@@ -71,7 +79,7 @@ export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; w
             ))}
           </ul>
         </section>
-        <section>
+        <section className="surface-note px-4 py-4">
           <h4 className="mb-2 text-base text-[var(--text)]">Why it matters</h4>
           <p>{whyArt}</p>
         </section>
