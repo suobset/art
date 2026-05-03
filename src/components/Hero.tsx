@@ -119,6 +119,7 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
             <a href={author.blog} className="control-button" data-variant="ghost">declarative {'->'}</a>
             <a href={author.about} className="control-button" data-variant="ghost">about kush {'->'}</a>
             <a href={author.projects} className="control-button" data-variant="ghost">projects {'->'}</a>
+            <a href="https://github.com/sponsors/suobset" className="control-button" data-variant="ghost">support on github {'->'}</a>
           </div>
         </aside>
       </div>
