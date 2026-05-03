@@ -11,9 +11,12 @@ export function Toggle({ pressed, onPressedChange, children }: ToggleProps) {
       type="button"
       aria-pressed={pressed}
       onClick={onPressedChange}
-      className="rounded-full border border-[var(--line)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--text)]"
+      className="control-button flex items-center gap-2 text-left"
     >
-      {children}
+      <span className="font-[var(--mono-font)] text-[0.7rem] uppercase tracking-[0.18em] text-[var(--text-faint)]">
+        {pressed ? 'on' : 'off'}
+      </span>
+      <span>{children}</span>
     </button>
   )
 }

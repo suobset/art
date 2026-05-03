@@ -20,17 +20,24 @@ export function Layout({
   const isHome = location.pathname === '/'
 
   return (
-    <div className="relative overflow-hidden">
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,95,210,0.08),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(107,227,255,0.1),transparent_26%)]" />
-      <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-[color:color-mix(in_srgb,var(--bg)_72%,transparent)] backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <Link to="/" className="font-[var(--hero-font)] text-2xl tracking-[-0.08em] text-[var(--text)]">
-            art + algorithms
-          </Link>
+    <div className="app-shell relative overflow-hidden">
+      <header className="sticky top-0 z-50 border-b border-[var(--rule-strong)] bg-[color:color-mix(in_srgb,var(--bg)_84%,transparent)] backdrop-blur-xl">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-3 md:grid-cols-[1fr_auto] md:px-6">
+          <div className="flex items-center gap-4">
+            <Link to="/" className="technical-rule pt-3 font-[var(--hero-font)] text-2xl tracking-[-0.08em] text-[var(--text)] md:text-[1.7rem]">
+              art + algorithms
+            </Link>
+            <div className="hidden items-center gap-2 md:flex">
+              <span className="meta-label">room atlas</span>
+              <span className="h-px w-10 bg-[var(--rule-strong)]" />
+              <span className="font-[var(--mono-font)] text-xs text-[var(--text-faint)]">AA-001</span>
+            </div>
+          </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
             <a
               href="https://skushagra.com"
-              className="rounded-full border border-[var(--line)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm text-[var(--text)] transition hover:border-[var(--accent-2)]"
+              className="control-button"
+              data-variant="ghost"
             >
               Created by Kush S.
             </a>
@@ -42,9 +49,10 @@ export function Layout({
             </Toggle>
             <Link
               to={isHome ? '/demo/gesture' : '/'}
-              className="rounded-full border border-[var(--accent)] px-3 py-1.5 text-sm text-[var(--text)] transition hover:bg-[var(--accent)] hover:text-black"
+              className="control-button"
+              data-variant="accent"
             >
-              {isHome ? 'enter the gallery' : 'gallery home'}
+              {isHome ? 'enter gallery ->' : 'gallery home ->'}
             </Link>
           </div>
         </div>
