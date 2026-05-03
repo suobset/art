@@ -5,6 +5,7 @@ import { Hero } from './components/Hero'
 import { GalleryNav } from './components/GalleryNav'
 import { Layout } from './components/Layout'
 import { DemoCard } from './components/DemoCard'
+import { Footer } from './components/Footer'
 import { manifesto } from './content/manifesto'
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <DemoCard key={demo.id} demo={demo} reducedMotion={reducedMotion} />
         ))}
       </main>
+      <Footer />
     </Layout>
   )
 }
