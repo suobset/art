@@ -37,7 +37,7 @@ export function HomePage({ reducedMotion }: HomePageProps) {
             >
               <div className="mb-3 flex items-center justify-between gap-3">
                 <p className="meta-label">room {String(index + 1).padStart(2, '0')}</p>
-                <span className="font-[var(--mono-font)] text-xs text-[var(--text-faint)]">enter -></span>
+                <span className="font-[var(--mono-font)] text-xs text-[var(--text-faint)]">enter {'->'}</span>
               </div>
               <h2 className="mb-3 font-[var(--hero-font)] text-3xl tracking-[-0.04em] text-[var(--text)]">{demo.title}</h2>
               <p className="mb-4 text-[var(--text-muted)]">{demo.shortDescription}</p>

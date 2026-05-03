@@ -101,9 +101,9 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
           <p className="mt-2 font-[var(--mono-font)] text-[0.7rem] uppercase tracking-[0.24em] text-[var(--accent-2)]">systems / compilers / cybersecurity</p>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">{author.bio}</p>
           <div className="mt-4 grid gap-2 text-sm">
-            <a href={author.blog} className="control-button" data-variant="ghost">declarative -></a>
-            <a href={author.about} className="control-button" data-variant="ghost">about kush -></a>
-            <a href={author.projects} className="control-button" data-variant="ghost">projects -></a>
+            <a href={author.blog} className="control-button" data-variant="ghost">declarative {'->'}</a>
+            <a href={author.about} className="control-button" data-variant="ghost">about kush {'->'}</a>
+            <a href={author.projects} className="control-button" data-variant="ghost">projects {'->'}</a>
           </div>
         </aside>
       </div>

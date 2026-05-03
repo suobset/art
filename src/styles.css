@@ -6,6 +6,11 @@
   --surface-strong: rgba(18, 15, 23, 0.98);
   --surface-subtle: rgba(35, 31, 41, 0.74);
   --surface-note: rgba(20, 17, 23, 0.82);
+  --bg-elevated: var(--surface);
+  --bg-panel: var(--surface-strong);
+  --muted: var(--text-muted);
+  --soft: var(--text-faint);
+  --line: var(--rule);
   --text: #f6efdd;
   --text-muted: #d2c5ad;
   --text-faint: #978d7f;
@@ -40,6 +45,11 @@
   --surface-strong: rgba(243, 233, 219, 0.98);
   --surface-subtle: rgba(232, 221, 203, 0.8);
   --surface-note: rgba(245, 235, 221, 0.92);
+  --bg-elevated: var(--surface);
+  --bg-panel: var(--surface-strong);
+  --muted: var(--text-muted);
+  --soft: var(--text-faint);
+  --line: var(--rule);
   --text: #1f1914;
   --text-muted: #4f4336;
   --text-faint: #756757;
