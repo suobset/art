@@ -88,7 +88,6 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
           <img src={author.portrait} alt={author.shortName} className="mb-4 aspect-[4/5] w-full rounded-[1.5rem] object-cover object-center" />
           <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[var(--soft)]">curated by</p>
           <h2 className="font-[var(--hero-font)] text-3xl tracking-[-0.04em] text-[var(--text)]">{author.shortName}</h2>
-          <p className="mt-2 text-sm text-[var(--accent-3)]">{author.summary}</p>
           <p className="mt-3 text-sm text-[var(--muted)]">{author.bio}</p>
           <div className="mt-4 flex flex-wrap gap-2 text-sm">
             <a href={author.blog} className="rounded-full border border-[var(--line)] px-3 py-2 text-[var(--text)] transition hover:border-[var(--accent)]">read declarative</a>
