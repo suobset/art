@@ -13,16 +13,16 @@ type DemoPageProps = {
 export function DemoPage({ reducedMotion }: DemoPageProps) {
   const { demoId } = useParams()
   const index = demos.findIndex((demo) => demo.id === demoId)
+  const demo = index === -1 ? null : demos[index]
+
+  useEffect(() => {
+    document.title = demo ? `${demo.title} - art + algorithms` : 'art + algorithms'
+  }, [demo])
 
   if (index === -1) {
     return <Navigate to="/" replace />
   }
-
-  const demo = demos[index]
-
-  useEffect(() => {
-    document.title = `${demo.title} - art + algorithms`
-  }, [demo.title])
+  const activeDemo = demos[index]!
   const previous = demos[(index - 1 + demos.length) % demos.length]
   const next = demos[(index + 1) % demos.length]
 
@@ -33,19 +33,19 @@ export function DemoPage({ reducedMotion }: DemoPageProps) {
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[var(--soft)]">art + algorithms · single work view</p>
-              <h1 className="font-[var(--hero-font)] text-4xl tracking-[-0.05em] text-[var(--text)] md:text-5xl">{demo.title}</h1>
+              <h1 className="font-[var(--hero-font)] text-4xl tracking-[-0.05em] text-[var(--text)] md:text-5xl">{activeDemo.title}</h1>
             </div>
             <Link to="/" className="rounded-full border border-[var(--line)] px-4 py-2 text-sm text-[var(--text)] transition hover:border-[var(--accent)]">
               back to gallery
             </Link>
           </div>
           <div className="grid gap-4 text-[var(--muted)] md:grid-cols-[1.5fr_1fr]">
-            <p>{demo.shortDescription}</p>
+            <p>{activeDemo.shortDescription}</p>
             <p>Curated by {author.shortName}. Hosted at <a href={author.artDomain} className="text-[var(--accent-2)] underline-offset-4 hover:underline">art.skushagra.com</a>.</p>
           </div>
         </div>
-        <GalleryNav demos={demos} mode="links" activeId={demo.id} />
-        <DemoCard demo={demo} reducedMotion={reducedMotion} forceOpen />
+        <GalleryNav demos={demos} mode="links" activeId={activeDemo.id} />
+        <DemoCard demo={activeDemo} reducedMotion={reducedMotion} forceOpen />
         <div className="grid gap-4 md:grid-cols-2">
           <Link to={`/demo/${previous.id}`} className="rounded-[1.75rem] border border-[var(--line)] bg-[var(--bg-elevated)] p-5 text-[var(--muted)] transition hover:border-[var(--accent)]">
             <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[var(--soft)]">previous room</p>

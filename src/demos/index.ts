@@ -20,14 +20,37 @@ export const demos: DemoDefinition[] = [
     tags: ['canvas', 'motion', 'seeded'],
     component: FlowFieldDemo,
     behindTheScenes: {
-      concept: 'Each particle samples the angle of an invisible field. Small changes to curl, speed, and disturbance make the whole piece feel like a different hand.',
-      codeExcerpt: `for (const particle of particles) {\n  const angle = fieldAt(particle.x, particle.y, seed) + pointerPull\n  particle.x += Math.cos(angle) * speed\n  particle.y += Math.sin(angle) * speed\n}`,
-      parameters: [
-        { name: 'density', meaning: 'How many marks are being drawn at once.' },
-        { name: 'curl', meaning: 'How tightly the invisible field bends.' },
-        { name: 'trail length', meaning: 'How quickly old marks fade away.' },
+      overview: 'Each particle acts like a tiny brush hair. It does not know the whole painting. It only asks the field which way to lean next, and the accumulation of those tiny decisions becomes a stroke.',
+      explanation: [
+        'A flow field is just a function that returns a direction for any point on the canvas. In this demo, that direction comes from a few layered sine and cosine waves plus a pointer disturbance.',
+        'The seed matters because it changes the field consistently. Two different seeds are not random noise in the everyday sense; they are two different invisible landscapes that every particle agrees to follow.',
+        'The visual style comes from several artistic choices: how many particles are active, how quickly old marks fade, how strongly the pointer bends the field, and how color cycles across the swarm.',
       ],
-      tryThis: ['Lower the trail fade and increase curl for smoky spirals.', 'Click the field several times and watch one disturbance echo through many particles.'],
+      parameters: [
+        { name: 'density', meaning: 'How many active marks are being drawn. Small screens cap the count so the drawing stays fluid.' },
+        { name: 'curl', meaning: 'How tightly the invisible directional field bends back on itself.' },
+        { name: 'speed', meaning: 'How far each particle moves on every frame.' },
+        { name: 'trail length', meaning: 'How much of the previous frame stays visible.' },
+        { name: 'color mood', meaning: 'Which palette the field uses to feel ember-like, lagoon-like, mossy, or velvet-like.' },
+      ],
+      snippets: [
+        {
+          title: 'The particle update loop',
+          code: `for (const particle of particles) {\n  const angle = fieldAt(particle.x, particle.y) + timeOffset\n  const nextX = particle.x + Math.cos(angle) * speed\n  const nextY = particle.y + Math.sin(angle) * speed\n\n  drawLine(particle.x, particle.y, nextX, nextY)\n  particle.x = nextX\n  particle.y = nextY\n}`,
+          note: 'This is the heart of the piece. There is no stored path. The path appears because we repeatedly ask for a direction and then commit to it.',
+        },
+        {
+          title: 'How the field bends',
+          code: `const drift = sin((x + seed * 0.001) * 0.011)\nconst swirl = sin((x * 0.013 + y * 0.01 + seed * 0.0004) * curl)\nconst pull = pointerActive\n  ? clamp(1 - distance(x, y, pointer.x, pointer.y) / 140, 0, 1) * 2.4\n  : 0\n\nreturn drift + swirl + pull + pulse`,
+          note: 'This is where mathematics turns into style. Tiny coefficient changes alter the field from calm stream to knotted turbulence.',
+        },
+        {
+          title: 'Why trails feel painterly',
+          code: `context.fillStyle = rgba(background, trailFade)\ncontext.fillRect(0, 0, width, height)`,
+          note: 'Instead of clearing the whole canvas every frame, the demo paints a translucent dark veil over the old image. That makes motion behave like residue.',
+        },
+      ],
+      tryThis: ['Lower the trail fade and increase curl for smoky spirals.', 'Click the field several times and notice that one disturbance can echo through many particles.', 'Compare two moods at the same seed to separate structure from palette.'],
     },
   },
   {
@@ -38,14 +61,36 @@ export const demos: DemoDefinition[] = [
     tags: ['grid', 'constraint', 'ascii'],
     component: PixelConstraintDemo,
     behindTheScenes: {
-      concept: 'The image is just a 32 by 18 array of numbers. Palette changes make the same structure read as poster, tapestry, or icon.',
-      codeExcerpt: `grid[y][x] = colorIndex\nif (mirrorMode) {\n  grid[y][width - 1 - x] = colorIndex\n}`,
-      parameters: [
-        { name: 'palette', meaning: 'Changes the emotional temperature without changing the structure.' },
-        { name: 'brush size', meaning: 'How much of the grid changes per gesture.' },
-        { name: 'mirror mode', meaning: 'Whether one action becomes two.' },
+      overview: 'This piece starts with a severe limit: 32 columns, 18 rows, and a tiny palette. That limit is not there to imitate technical weakness. It is there to create a specific kind of visual thinking.',
+      explanation: [
+        'The image is just a two-dimensional array of small integers. A cell value of 0 might mean background; 1, 2, and 3 choose other palette entries. The display is simply a readable skin over those numbers.',
+        'Mirror mode is a good example of computational authorship. One stroke does not just draw; it declares a symmetry rule. The computer carries that rule out faster and more perfectly than a person would.',
+        'The ASCII export matters because it reveals how thin the representation is. An image can survive translation into text if the underlying structure is strong enough.',
       ],
-      tryThis: ['Turn mirror mode off for asymmetry, then back on to see the composition lock into a new rule.', 'Copy the ASCII output and notice how little data is needed to keep the image alive.'],
+      parameters: [
+        { name: 'palette', meaning: 'Changes the emotional register of the same numerical structure.' },
+        { name: 'brush size', meaning: 'Determines how much of the grid changes per mark.' },
+        { name: 'mirror mode', meaning: 'Turns one gesture into a bilateral rule.' },
+        { name: 'show data representation', meaning: 'Lets visitors inspect the raw array, not just the rendered image.' },
+      ],
+      snippets: [
+        {
+          title: 'The image really is an array',
+          code: `const grid = Array.from({ length: 18 }, () =>\n  Array.from({ length: 32 }, () => 0)\n)`,
+          note: 'There is no hidden raster engine here. The artwork starts as a small table of values.',
+        },
+        {
+          title: 'Painting with symmetry',
+          code: `next[y][x] = color\nif (mirrorMode) {\n  next[y][width - 1 - x] = color\n}`,
+          note: 'This is where the tool becomes expressive. A single decision is mirrored into a second one, and that enforced echo shapes the composition.',
+        },
+        {
+          title: 'ASCII is another rendering mode',
+          code: `const glyphs = [' ', '.', '*', '#']\nreturn grid\n  .map((row) => row.map((cell) => glyphs[cell]).join(''))\n  .join('\\n')`,
+          note: 'The same data can appear as color blocks or characters. The representation changes, but the composition persists.',
+        },
+      ],
+      tryThis: ['Turn mirror mode off for asymmetry, then back on to feel the piece re-enter a rule.', 'Copy the ASCII output and inspect how little information is needed to keep the image alive.', 'Switch palettes without repainting anything.'],
     },
   },
   {
@@ -56,14 +101,40 @@ export const demos: DemoDefinition[] = [
     tags: ['algorithm', 'tempo', 'comparison'],
     component: SortingChoreographyDemo,
     behindTheScenes: {
-      concept: 'Every sorting method reaches the same destination, but with a different rhythm of hesitation, swap, and sweep.',
-      codeExcerpt: `steps.push({ values, active: [i, j], swap: false })\nif (values[i] > values[j]) {\n  swap(values, i, j)\n  steps.push({ values, active: [i, j], swap: true })\n}`,
-      parameters: [
-        { name: 'algorithm', meaning: 'Changes the movement vocabulary.' },
-        { name: 'tempo', meaning: 'Decides whether the piece reads as pulse, march, or shimmer.' },
-        { name: 'color mode', meaning: 'Lets value or motion take visual priority.' },
+      overview: 'All four algorithms solve the same problem, but they move through it with strikingly different rhythms. The point is not merely that they differ in complexity; it is that they feel different in motion.',
+      explanation: [
+        'The demo precomputes a sequence of states called steps. Each step contains a snapshot of the values plus the bars currently being compared or swapped. The animation is just a performer walking through that score.',
+        'Bubble sort keeps nudging neighbors, insertion sort carries one value backward until it fits, quicksort creates dramatic pivots and partitions, and merge sort builds order in chunks before stitching them together.',
+        'By exposing play, pause, and step controls, the piece lets you watch an algorithm as choreography instead of only as an answer machine.',
       ],
-      tryThis: ['Switch from insertion to quicksort at the same tempo and feel how the rhythm jumps.', 'Use step mode to study a single comparison like a frame in choreography notation.'],
+      parameters: [
+        { name: 'algorithm', meaning: 'Chooses which movement vocabulary generates the step score.' },
+        { name: 'tempo', meaning: 'Controls whether the sequence reads as shimmer, walk, or march.' },
+        { name: 'color mode', meaning: 'Either colors the bars by value or emphasizes movement events.' },
+      ],
+      snippets: [
+        {
+          title: 'Bubble sort: local nudges',
+          code: `for (let j = 0; j < values.length - i - 1; j += 1) {\n  steps.push({ values: [...values], active: [j, j + 1], swap: false })\n  if (values[j] > values[j + 1]) {\n    swap(values, j, j + 1)\n    steps.push({ values: [...values], active: [j, j + 1], swap: true })\n  }\n}`,
+          note: 'Bubble sort reads like a repeated social correction: compare neighbors, swap if needed, repeat until the largest values drift upward.',
+        },
+        {
+          title: 'Insertion sort: carrying a value backward',
+          code: `while (j > 0) {\n  steps.push({ values: [...values], active: [j - 1, j], swap: false })\n  if (values[j - 1] <= values[j]) break\n  swap(values, j - 1, j)\n  steps.push({ values: [...values], active: [j - 1, j], swap: true })\n  j -= 1\n}`,
+          note: 'Insertion sort feels more purposeful than bubble sort. A value enters the partially sorted line and keeps moving until it belongs.',
+        },
+        {
+          title: 'Quicksort: pivot and partition',
+          code: `const pivot = values[end]\nfor (let index = start; index < end; index += 1) {\n  steps.push({ values: [...values], active: [index, end], swap: false })\n  if (values[index] <= pivot) {\n    swap(values, index, split)\n    steps.push({ values: [...values], active: [index, split], swap: true })\n    split += 1\n  }\n}`,
+          note: 'Quicksort has a more theatrical structure: choose a pivot, separate the crowd around it, then recurse into smaller scenes.',
+        },
+        {
+          title: 'Merge sort: stitch ordered chunks',
+          code: `while (left < mid && right < end) {\n  steps.push({ values: [...values], active: [left, right], swap: false })\n  merged.push(values[left] < values[right] ? values[left++] : values[right++])\n}\nmerged.forEach((value, offset) => {\n  values[start + offset] = value\n  steps.push({ values: [...values], active: [start + offset], swap: true })\n})`,
+          note: 'Merge sort is less about swapping in place and more about composing larger sorted fragments from smaller ones.',
+        },
+      ],
+      tryThis: ['Hold tempo constant and switch algorithms to compare their gait directly.', 'Use step mode to see how merge sort differs from the swap-heavy algorithms.', 'Watch quicksort in movement color mode so pivot-driven events stand out.'],
     },
   },
   {
@@ -74,14 +145,36 @@ export const demos: DemoDefinition[] = [
     tags: ['rules', 'emergence', 'grid'],
     component: CellularAutomataDemo,
     behindTheScenes: {
-      concept: 'Each cell only checks nearby cells. The surprise comes from how those tiny decisions propagate across the whole plane.',
-      codeExcerpt: `const neighbors = countNeighbors(world, x, y)\nif (cell === 1) return survive.has(neighbors) ? 1 : 0\nreturn birth.has(neighbors) ? 1 : 0`,
-      parameters: [
-        { name: 'birth values', meaning: 'Neighbor counts that create new cells.' },
-        { name: 'survival values', meaning: 'Neighbor counts that keep existing cells alive.' },
-        { name: 'speed', meaning: 'How quickly the system reveals its weather.' },
+      overview: 'Each cell knows almost nothing. It only checks its immediate neighbors. The surprise is that tiny local logic can still produce large-scale texture, growth, collapse, and drift.',
+      explanation: [
+        'A cellular automaton advances in generations. On each generation, every cell counts nearby live cells and decides whether it should be alive in the next frame.',
+        'Birth values and survival values are the entire rule system. If a dead cell has one of the allowed birth counts, it turns on. If a live cell has one of the allowed survival counts, it stays on.',
+        'That rule feels small enough to fit on a napkin, but the repeated application of it can create behavior that looks biological, meteorological, or architectural.',
       ],
-      tryThis: ['Draw a few dense clusters, then step slowly instead of running.', 'Try the cave preset and then erase a channel to redirect the growth.'],
+      parameters: [
+        { name: 'birth values', meaning: 'Neighbor counts that create a live cell from a dead one.' },
+        { name: 'survival values', meaning: 'Neighbor counts that let a live cell persist.' },
+        { name: 'speed', meaning: 'How quickly the world advances through generations.' },
+        { name: 'cell size', meaning: 'How granular the weather appears on screen.' },
+      ],
+      snippets: [
+        {
+          title: 'Counting neighbors',
+          code: `for (let yy = -1; yy <= 1; yy += 1) {\n  for (let xx = -1; xx <= 1; xx += 1) {\n    if (xx === 0 && yy === 0) continue\n    count += world[y + yy]?.[x + xx] ?? 0\n  }\n}`,
+          note: 'The automaton has only local awareness. It never scans the whole image for meaning.',
+        },
+        {
+          title: 'One generation step',
+          code: `const neighbors = countNeighbors(world, x, y)\nif (cell === 1) {\n  return survivalRule.has(neighbors) ? 1 : 0\n}\nreturn birthRule.has(neighbors) ? 1 : 0`,
+          note: 'This is the entire law of the world. Complexity arrives not by adding many exceptions, but by repeating a tiny rule for every cell.',
+        },
+        {
+          title: 'Drawing is editing initial conditions',
+          code: `next[y][x] = drawMode\nreturn next`,
+          note: 'When you paint into the grid, you are not drawing the final picture. You are seeding the next few generations.',
+        },
+      ],
+      tryThis: ['Draw a few dense clusters, then step slowly instead of running.', 'Try the cave preset and then erase a channel to redirect growth.', 'Change the cell size after the same seed and notice how scale changes the mood of the system.'],
     },
   },
   {
@@ -92,14 +185,41 @@ export const demos: DemoDefinition[] = [
     tags: ['language', 'grammar', 'remix'],
     component: GenerativePoetryDemo,
     behindTheScenes: {
-      concept: 'The poem is built from hand-written banks and a clear template. Locking a word turns the system into a constrained revision partner.',
-      codeExcerpt: `line := noun + verb + optional texture + place\nif (lockedWord) noun = lockedWord\ntexture appears more often as temperature rises`,
-      parameters: [
-        { name: 'mood', meaning: 'Swaps the vocabulary set.' },
-        { name: 'temperature', meaning: 'Raises the chance of detours and texture phrases.' },
-        { name: 'punctuation density', meaning: 'Changes the breathing pattern of the line.' },
+      overview: 'This poem generator is deliberately small, local, and legible. It uses hand-written word banks and a simple grammar rather than a remote model or an attempt to imitate human consciousness.',
+      explanation: [
+        'A mood selects a vocabulary bank. That bank contains nouns, verbs, textures, and places. The generator then assembles lines by choosing words from those buckets according to a visible template.',
+        'Temperature does not mean hidden intelligence here. It just changes how often the generator makes a more ornamental choice, such as including an extra texture phrase.',
+        'The lock interaction matters artistically because it turns the visitor into a co-editor. You can freeze a word and ask the system to rewrite around it, which is closer to constrained revision than to autonomous authorship.',
       ],
-      tryThis: ['Lock one word in each line and regenerate until the poem starts to feel authored.', 'Lower punctuation and raise temperature to make the syntax loosen.'],
+      parameters: [
+        { name: 'mood', meaning: 'Switches among different hand-authored vocabularies.' },
+        { name: 'temperature', meaning: 'Raises the chance of extra descriptive detours.' },
+        { name: 'line count', meaning: 'Changes the scale of the poem.' },
+        { name: 'punctuation density', meaning: 'Changes how often the generator inserts pauses.' },
+      ],
+      snippets: [
+        {
+          title: 'The grammar is explicit',
+          code: `line := noun + verb + optional texture + place`,
+          note: 'The structure is visible on purpose. The piece is not trying to hide its machinery.',
+        },
+        {
+          title: 'Choosing from hand-written banks',
+          code: `const bank = banks[mood]\nconst noun = lockedWord || pickOne(random, bank.nouns)\nconst verb = pickOne(random, bank.verbs)\nconst texture = random() > threshold ? pickOne(random, bank.textures) : ''\nconst place = pickOne(random, bank.places)`,
+          note: 'The expressive material comes from authored word lists, not scraped corpora or an opaque probability cloud.',
+        },
+        {
+          title: 'Locking a word',
+          code: `next[index] = locked ? '' : firstWord`,
+          note: 'This tiny mechanic is what makes the generator feel collaborative. One word can anchor a line while the surrounding language changes.',
+        },
+      ],
+      distinctions: [
+        'This demo does not call any external AI or LLM service.',
+        'It does not predict text from a giant training set; it samples from small local vocabularies written for this project.',
+        'Its authorship is shared between the writer of the word banks, the designer of the grammar, and the visitor choosing locks and controls.',
+      ],
+      tryThis: ['Lock one word in each line and regenerate until the poem starts to feel authored rather than merely random.', 'Lower punctuation and raise temperature to loosen the syntax.', 'Switch moods without changing line count to hear the same structure speak differently.'],
     },
   },
   {
@@ -110,14 +230,36 @@ export const demos: DemoDefinition[] = [
     tags: ['svg', 'recursion', 'growth'],
     component: RecursiveGardenDemo,
     behindTheScenes: {
-      concept: 'Each branch calls for smaller branches. Variation in angle, depth, and asymmetry stops the repetition from feeling mechanical.',
-      codeExcerpt: `grow(x2, y2, nextLength, angle + spread, depth - 1)\ngrow(x2, y2, nextLength, angle - spread, depth - 1)`,
-      parameters: [
-        { name: 'depth', meaning: 'How many times the tree remembers to branch.' },
-        { name: 'asymmetry', meaning: 'How much the left and right decisions differ.' },
-        { name: 'wind', meaning: 'A small offset that makes the static structure feel alive.' },
+      overview: 'A recursive drawing is a rule that calls itself. A branch makes smaller branches, which make smaller branches, until the structure decides it has said enough.',
+      explanation: [
+        'The tree begins with one trunk segment. From the end of that segment, the program recursively spawns child branches with smaller lengths and changed angles.',
+        'Depth sets how many generations of memory the tree keeps. Asymmetry prevents perfect mirror balance, which helps the tree feel weathered or biological instead of diagrammatic.',
+        'The season palette is a reminder that the same geometry can carry different moods when color and atmosphere shift. Shape is not the only artistic choice.',
       ],
-      tryThis: ['Increase asymmetry until the tree starts to feel weathered rather than idealized.', 'Switch seasons without changing the seed to see palette act like lighting design.'],
+      parameters: [
+        { name: 'branching angle', meaning: 'How wide each split opens.' },
+        { name: 'depth', meaning: 'How many times the system recursively branches before stopping.' },
+        { name: 'asymmetry', meaning: 'How differently the left and right branches behave.' },
+        { name: 'wind', meaning: 'A small motion offset that makes the structure feel less frozen.' },
+      ],
+      snippets: [
+        {
+          title: 'Each branch begets more branches',
+          code: `grow(random, x2, y2, nextLength, angle + spread, depth - 1, ...)\ngrow(random, x2, y2, nextLength, angle - spread, depth - 1, ...)`,
+          note: 'This is the recursive leap. A branch does not draw the whole tree; it delegates smaller versions of itself.',
+        },
+        {
+          title: 'Variation keeps recursion organic',
+          code: `const spread = randomBetween(random, 0.2, 0.55) + asymmetry * 0.08\nconst nextLength = length * randomBetween(random, 0.68, 0.82)`,
+          note: 'Without small differences in angle and scale, recursion can look like a sterile diagram. Variation is what makes it feel alive.',
+        },
+        {
+          title: 'Leaves are depth-aware accents',
+          code: `const leaf = depth <= 1 || random() < leafDensity * 0.35`,
+          note: 'Leaves are not painted everywhere. They appear where the structure thins out, which helps the tree read as growth rather than decoration.',
+        },
+      ],
+      tryThis: ['Increase asymmetry until the tree starts to feel weathered rather than idealized.', 'Switch seasons without changing the seed to separate geometry from palette.', 'Reduce wind and increase depth to study the branch architecture more clearly.'],
     },
   },
   {
@@ -128,14 +270,36 @@ export const demos: DemoDefinition[] = [
     tags: ['canvas', 'math', 'light'],
     component: ShaderWithoutShadersDemo,
     behindTheScenes: {
-      concept: 'Sine waves, radial distance, and color quantization combine into something that looks lit from inside.',
-      codeExcerpt: `const wave = sin((x * frequency + phase) * 3.1)\nconst flare = sin(radius * 16 - time * 3)\nconst brightness = clamp((wave + flare + 2) / 4, 0, 1)`,
-      parameters: [
-        { name: 'frequency', meaning: 'How tightly the wave bands repeat.' },
-        { name: 'distortion', meaning: 'How much the pattern refuses smooth regularity.' },
-        { name: 'resolution', meaning: 'How coarse or fine the fake pixels feel.' },
+      overview: 'This piece imitates some of the visual logic people associate with shaders, but it does it in ordinary canvas code. The glow comes from arithmetic patterns, not from a 3D pipeline.',
+      explanation: [
+        'Each visible block samples a few mathematical functions: horizontal waves, vertical ripples, and a radial flare based on distance from an apparent light source.',
+        'Those values are blended into a brightness number between 0 and 1. That brightness is then mapped into a palette, so color becomes a translation of mathematics.',
+        'The result feels luminous because periodic functions create smooth variation, and the palette turns those gradients into bands that the eye reads as light.',
       ],
-      tryThis: ['Lower the resolution until the image becomes a woven screen instead of a gradient.', 'Pause the animation and move the pointer to compose a still frame.'],
+      parameters: [
+        { name: 'frequency', meaning: 'How tightly the wave system oscillates.' },
+        { name: 'phase', meaning: 'Where the periodic cycle is sampled right now.' },
+        { name: 'distortion', meaning: 'How much the radial flare unsettles the wave pattern.' },
+        { name: 'resolution', meaning: 'How large each sampled block is.' },
+      ],
+      snippets: [
+        {
+          title: 'Sample arithmetic instead of pixels alone',
+          code: `const wave = Math.sin((nx * frequency + time + seed * 0.00001) * 3.1)\nconst ripple = Math.cos((ny * frequency - time) * 2.7)\nconst flare = Math.sin((radius * 16 - time * 3) * (1 + distortion * 2))`,
+          note: 'These are just functions returning numbers. What makes them visual is how consistently they are sampled across space.',
+        },
+        {
+          title: 'Turn values into color bands',
+          code: `const brightness = clamp((wave + ripple + flare + 3) / 6, 0, 1)\nconst colorIndex = Math.floor(brightness * (colors.length - 0.01))\ncontext.fillStyle = colors[colorIndex]`,
+          note: 'Brightness is not yet an image. Palette mapping is what gives that number an emotional and visual identity.',
+        },
+        {
+          title: 'Resolution changes the surface quality',
+          code: `for (let y = 0; y < height; y += block) {\n  for (let x = 0; x < width; x += block) {\n    context.fillRect(x, y, block + 1, block + 1)\n  }\n}`,
+          note: 'Lower resolution does not just reduce detail. It changes the visual texture from glow to mosaic.',
+        },
+      ],
+      tryThis: ['Lower the resolution until the image becomes a woven screen instead of a gradient.', 'Pause the animation and move the pointer to compose a still frame.', 'Keep the same frequency but switch palettes to compare geometry and atmosphere.'],
     },
   },
   {
@@ -146,14 +310,37 @@ export const demos: DemoDefinition[] = [
     tags: ['type', 'motion', 'layout'],
     component: KineticTypeDemo,
     behindTheScenes: {
-      concept: 'Each letter gets its own transform based on pointer position, spacing, and a few force-like parameters. Layout becomes choreography.',
-      codeExcerpt: `offsetX = pointerPull * intensity\noffsetY = sin(index + pointer.x) * elasticity - gravity\nrotate = mix(-10, 10, pointer.y)`,
-      parameters: [
-        { name: 'gravity', meaning: 'How much letters sink back toward a baseline.' },
-        { name: 'elasticity', meaning: 'How springy the rebound feels.' },
-        { name: 'spacing', meaning: 'How much breathing room the phrase gets.' },
+      overview: 'This is not typography as a frozen layout. Each letter is treated as an actor with state: it can lean, drift, bunch up, and settle differently depending on the forces around it.',
+      explanation: [
+        'The phrase is split into characters, and each character gets a position derived from its index plus a dynamic offset based on pointer location and the current control values.',
+        'Gravity, elasticity, and spacing are not literal physics, but they are useful metaphors. They give visitors an intuitive mental model for how the piece will respond.',
+        'Because each letter is transformed independently, text stops being a single block and becomes a composition of moving bodies.',
       ],
-      tryThis: ['Type a short phrase with repeating letters and move the pointer slowly across it.', 'Drop motion intensity to zero and then bring it back to feel the composition wake up.'],
+      parameters: [
+        { name: 'phrase', meaning: 'The text used as material.' },
+        { name: 'gravity', meaning: 'How strongly letters fall back toward a baseline.' },
+        { name: 'elasticity', meaning: 'How springy their vertical response feels.' },
+        { name: 'spacing', meaning: 'How much room each letter gets to breathe.' },
+        { name: 'motion intensity', meaning: 'How dramatically pointer movement affects the phrase.' },
+      ],
+      snippets: [
+        {
+          title: 'Text becomes a list of bodies',
+          code: `const letters = phrase.split('')`,
+          note: 'This small step is conceptually important. The piece stops treating the phrase as one immutable string and starts treating it as many independent forms.',
+        },
+        {
+          title: 'Per-letter transforms',
+          code: `const offsetX = pointerActive ? (0.5 - distanceFromPointer) * 48 * motionIntensity : 0\nconst offsetY = Math.sin(index * 0.7 + pointer.x * 5) * 18 * elasticity - gravity * 12\nconst rotate = mix(-10, 10, pointer.y) * motionIntensity`,
+          note: 'Each letter uses the same formula family, but different inputs. That shared rule plus local variation is what makes the phrase feel coherent rather than chaotic.',
+        },
+        {
+          title: 'Spacing is part of the composition',
+          code: "style={{ paddingInline: `${spacing * 0.12}em` }}",
+          note: 'Spacing is not merely typographic hygiene here. It changes how the moving bodies collide visually and how the phrase breathes.',
+        },
+      ],
+      tryThis: ['Type a short phrase with repeating letters and move the pointer slowly across it.', 'Drop motion intensity to zero and bring it back to feel the phrase wake up.', 'Compare high gravity to high elasticity; one makes the phrase heavy, the other buoyant.'],
     },
   },
   {
@@ -164,14 +351,36 @@ export const demos: DemoDefinition[] = [
     tags: ['search', 'grid', 'comparison'],
     component: PathfindingPersonalityDemo,
     behindTheScenes: {
-      concept: 'The path may be similar, but the search frontier expands with a different personality depending on the algorithm and heuristic pressure.',
-      codeExcerpt: `priority = cost + heuristic(next, end) * heuristicStrength\nfrontier.push({ point: next, cost, priority })`,
-      parameters: [
-        { name: 'algorithm', meaning: 'Changes whether search feels broad, deep, patient, or goal-hungry.' },
-        { name: 'heuristic strength', meaning: 'Pushes A* toward greed or restraint.' },
-        { name: 'maze density', meaning: 'Controls how much resistance the search meets.' },
+      overview: 'Pathfinding is usually presented as a sober engineering task: find a route from A to B. This piece keeps the task intact but makes the search behavior itself visible and characterful.',
+      explanation: [
+        'The maze is a grid of walls and open cells. Start and end points define the problem. The interesting part is how the search frontier expands through that space.',
+        'Breadth-first search expands in waves, depth-first search commits to corridors and backtracks later, Dijkstra measures path cost methodically, and A* adds a heuristic that pulls the search toward the goal.',
+        'Watching the visited set grow is the key artistic move here. It lets the algorithm reveal its temperament, not just its answer.',
       ],
-      tryThis: ['Set heuristic strength to zero and compare A* to Dijkstra.', 'Drag the end point into a corner and watch DFS wander before it commits.'],
+      parameters: [
+        { name: 'algorithm', meaning: 'Chooses the search style.' },
+        { name: 'maze density', meaning: 'Sets how much resistance the search must navigate.' },
+        { name: 'heuristic strength', meaning: 'Controls how aggressively A* trusts its guess about the goal direction.' },
+        { name: 'speed', meaning: 'Changes whether the search reads as a flash or a thought process.' },
+      ],
+      snippets: [
+        {
+          title: 'Neighbors define local motion',
+          code: `return [\n  { x: point.x + 1, y: point.y },\n  { x: point.x - 1, y: point.y },\n  { x: point.x, y: point.y + 1 },\n  { x: point.x, y: point.y - 1 },\n]`,
+          note: 'Every algorithm here uses the same local geography. The personality differences come from search policy, not from cheating with different worlds.',
+        },
+        {
+          title: 'DFS commits to a corridor',
+          code: `const current = stack.pop()\nvisited.add(key(current))\nfor (const next of neighbors(current).reverse()) {\n  if (!wall(next) && !visited.has(key(next))) stack.push(next)\n}`,
+          note: 'Depth-first search dives quickly. It feels decisive, but it may wander far down an unhelpful path before returning.',
+        },
+        {
+          title: 'Dijkstra and A* score the frontier',
+          code: `const cost = current.cost + 1\nconst priority = algorithm === 'astar'\n  ? cost + heuristic(next, end) * heuristicStrength\n  : cost\nfrontier.push({ point: next, cost, priority })`,
+          note: 'Dijkstra trusts accumulated cost alone. A* adds a guess about future distance, which makes it feel more goal-aware and sometimes more impatient.',
+        },
+      ],
+      tryThis: ['Set heuristic strength to zero and compare A* to Dijkstra.', 'Drag the end point into a corner and watch DFS wander before it commits.', 'Increase maze density and lower speed so the frontier growth becomes legible.'],
     },
   },
   {
@@ -182,14 +391,36 @@ export const demos: DemoDefinition[] = [
     tags: ['source', 'parser', 'remix'],
     component: SourceRemixDemo,
     behindTheScenes: {
-      concept: 'Only a few constants are editable, but that is enough to expose the work as readable procedure instead of a sealed image.',
-      codeExcerpt: `if (!line.matches(allowedPattern)) showGentleError()\nconstants[name] = Number(value)\nredraw(constants)`,
-      parameters: [
-        { name: 'orbit', meaning: 'How fast the petal controls cycle around the center.' },
-        { name: 'petals', meaning: 'How many strokes the figure remembers to draw.' },
-        { name: 'jitter', meaning: 'How much each petal slips away from perfect symmetry.' },
+      overview: 'The artwork is not only the flower-like image. It is also the tiny readable program that generates it. Changing a few constants is enough to move the work from one personality to another.',
+      explanation: [
+        'The editable text area is intentionally constrained. Visitors are not asked to write arbitrary JavaScript. They are asked to modify a small, safe vocabulary of numeric constants.',
+        'The parser checks whether each line matches one of the allowed constant assignments. If it does, the drawing updates. If it does not, the piece responds gently instead of crashing or pretending the input was valid.',
+        'This matters because source code here is not backstage machinery. It is part of the encounter. The visitor is allowed to touch the spell, not only admire the result.',
       ],
-      tryThis: ['Change one number at a time and notice how little source is needed to redirect the whole image.', 'Try an invalid line and see how the piece protects the edit without pretending nothing happened.'],
+      parameters: [
+        { name: 'orbit', meaning: 'How quickly petal control points cycle around the center.' },
+        { name: 'petals', meaning: 'How many main strokes are drawn.' },
+        { name: 'jitter', meaning: 'How far the control points slide from perfect symmetry.' },
+        { name: 'thickness', meaning: 'How delicate or insistent each stroke appears.' },
+      ],
+      snippets: [
+        {
+          title: 'Parse only a safe mini-language',
+          code: `const match = line.match(\n  /^(orbit|petals|jitter|thickness)\\s*=\\s*(-?\\d+(?:\\.\\d+)?)$/\n)\nif (!match) return { values: null, error: 'Could not read line' }`,
+          note: 'The input is constrained on purpose. This keeps the piece approachable while still making the source feel real and consequential.',
+        },
+        {
+          title: 'Apply only valid edits',
+          code: `const next = parseSource(source)\nif (!next.values) {\n  setError(next.error)\n  return\n}\nsetApplied(source)`,
+          note: 'A good live-edit experience needs graceful failure. Invalid text becomes feedback, not a broken artwork.',
+        },
+        {
+          title: 'Draw petals from a few constants',
+          code: `const angle = (Math.PI * 2 * index) / petals\nconst radius = 58 + Math.sin(angle * orbit) * 22\nconst x = 180 + Math.cos(angle) * radius\nconst y = 160 + Math.sin(angle) * radius`,
+          note: 'Very little code is needed to generate a visibly rich form. That is one of the main arguments of the whole site.',
+        },
+      ],
+      tryThis: ['Change one number at a time and notice how little source is needed to redirect the whole image.', 'Try a prime number for petals, then raise orbit.', 'Enter an invalid line on purpose and watch how the piece protects the editing experience.'],
     },
   },
 ]
