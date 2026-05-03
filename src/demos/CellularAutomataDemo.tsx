@@ -50,8 +50,8 @@ function countNeighbors(world: Cell[][], x: number, y: number) {
 export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
   const [world, setWorld] = useState<Cell[][]>(() => randomWorld())
   const [preset, setPreset] = useState<PresetName>('life')
-  const [birth, setBirth] = useState(presets.life.birth)
-  const [survival, setSurvival] = useState(presets.life.survival)
+  const [birth, setBirth] = useState<string>(presets.life.birth)
+  const [survival, setSurvival] = useState<string>(presets.life.survival)
   const [speed, setSpeed] = useState(220)
   const [cellSize, setCellSize] = useState(14)
   const [drawMode, setDrawMode] = useState<Cell>(1)
