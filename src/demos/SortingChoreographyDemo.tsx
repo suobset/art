@@ -127,10 +127,6 @@ export function SortingChoreographyDemo({ reducedMotion }: DemoComponentProps) {
   }
 
   useEffect(() => {
-    setStepIndex(0)
-  }, [algorithm, baseValues])
-
-  useEffect(() => {
     if (!playing || reducedMotion) {
       return
     }
@@ -156,15 +152,15 @@ export function SortingChoreographyDemo({ reducedMotion }: DemoComponentProps) {
             <button type="button" onClick={() => setStepIndex((index) => Math.min(index + 1, steps.length - 1))} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               step
             </button>
-            <button type="button" onClick={() => setBaseValues(createValues())} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setBaseValues(createValues()); setStepIndex(0) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               shuffle
             </button>
-            <button type="button" onClick={() => { setBaseValues(createValues()); setPlaying(true) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setBaseValues(createValues()); setStepIndex(0); setPlaying(true) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               reset
             </button>
           </div>
           <Parameter label="algorithm">
-            <select value={algorithm} onChange={(event) => setAlgorithm(event.target.value as Algorithm)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={algorithm} onChange={(event) => { setAlgorithm(event.target.value as Algorithm); setStepIndex(0) }} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
               <option value="bubble" className="bg-[#120f15]">bubble</option>
               <option value="insertion" className="bg-[#120f15]">insertion</option>
               <option value="quicksort" className="bg-[#120f15]">quicksort</option>

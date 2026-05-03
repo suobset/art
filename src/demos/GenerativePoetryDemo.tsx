@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { DemoControls } from '../components/DemoControls'
 import { Parameter } from '../components/Parameter'
-import type { DemoComponentProps } from '../lib/demoTypes'
 import { createSeededRandom, pickOne } from '../lib/random'
 
 type Mood = 'tender' | 'electric' | 'grave'
@@ -34,8 +33,15 @@ const banks: Record<Mood, Banks> = {
   },
 }
 
-function buildPoem(mood: Mood, randomness: number, lineLength: number, punctuationDensity: number, locks: string[]) {
-  const random = createSeededRandom(Date.now())
+function buildPoem(
+  mood: Mood,
+  randomness: number,
+  lineLength: number,
+  punctuationDensity: number,
+  locks: string[],
+  revision: number,
+) {
+  const random = createSeededRandom(Date.now() + revision * 97)
   const bank = banks[mood]
   const lines = Array.from({ length: lineLength }, (_, index) => {
     const locked = locks[index]
@@ -49,7 +55,7 @@ function buildPoem(mood: Mood, randomness: number, lineLength: number, punctuati
   return lines
 }
 
-export function GenerativePoetryDemo(_: DemoComponentProps) {
+export function GenerativePoetryDemo() {
   const [mood, setMood] = useState<Mood>('tender')
   const [randomness, setRandomness] = useState(0.5)
   const [lineLength, setLineLength] = useState(4)
@@ -59,7 +65,7 @@ export function GenerativePoetryDemo(_: DemoComponentProps) {
   const [showGrammar, setShowGrammar] = useState(false)
 
   const poem = useMemo(
-    () => buildPoem(mood, randomness, lineLength, punctuationDensity, locks),
+    () => buildPoem(mood, randomness, lineLength, punctuationDensity, locks, revision),
     [mood, randomness, lineLength, punctuationDensity, locks, revision],
   )
 

@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { DemoControls } from '../components/DemoControls'
 import { Parameter } from '../components/Parameter'
-import type { DemoComponentProps } from '../lib/demoTypes'
 import { createSeededRandom } from '../lib/random'
 
 const width = 32
@@ -23,7 +22,7 @@ function exportAscii(grid: number[][]) {
   return grid.map((row) => row.map((cell) => glyphs[cell] ?? '?').join('')).join('\n')
 }
 
-export function PixelConstraintDemo(_: DemoComponentProps) {
+export function PixelConstraintDemo() {
   const [grid, setGrid] = useState<number[][]>(() => makeGrid())
   const [palette, setPalette] = useState<PaletteName>('dusk')
   const [brushSize, setBrushSize] = useState(1)

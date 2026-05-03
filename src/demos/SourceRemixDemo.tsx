@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { DemoControls } from '../components/DemoControls'
 import { Parameter } from '../components/Parameter'
-import type { DemoComponentProps } from '../lib/demoTypes'
 import { createSeededRandom } from '../lib/random'
 
 const defaultSource = `orbit = 5.2
@@ -38,7 +37,7 @@ function mutate(source: string) {
   return `orbit = ${(parsed.values.orbit + (random() - 0.5) * 2).toFixed(2)}\npetals = ${Math.max(3, Math.round(parsed.values.petals + (random() - 0.5) * 4))}\njitter = ${Math.max(0, parsed.values.jitter + (random() - 0.5) * 0.2).toFixed(2)}\nthickness = ${Math.max(0.6, parsed.values.thickness + (random() - 0.5) * 0.6).toFixed(2)}`
 }
 
-export function SourceRemixDemo(_: DemoComponentProps) {
+export function SourceRemixDemo() {
   const [source, setSource] = useState(defaultSource)
   const [applied, setApplied] = useState(defaultSource)
   const [error, setError] = useState('')

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DemoControls } from '../components/DemoControls'
 import { Parameter } from '../components/Parameter'
 import type { DemoComponentProps } from '../lib/demoTypes'
@@ -60,7 +60,7 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
   const birthRule = useMemo(() => parseRule(birth), [birth])
   const survivalRule = useMemo(() => parseRule(survival), [survival])
 
-  const step = () => {
+  const step = useCallback(() => {
     setWorld((current) =>
       current.map((row, y) =>
         row.map((cell, x) => {
@@ -72,7 +72,7 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
         }) as Cell[],
       ),
     )
-  }
+  }, [birthRule, survivalRule])
 
   useEffect(() => {
     if (!playing || reducedMotion) {
@@ -80,7 +80,7 @@ export function CellularAutomataDemo({ reducedMotion }: DemoComponentProps) {
     }
     const timer = window.setInterval(step, speed)
     return () => window.clearInterval(timer)
-  }, [playing, reducedMotion, speed, birthRule, survivalRule])
+  }, [playing, reducedMotion, speed, step])
 
   return (
     <DemoControls

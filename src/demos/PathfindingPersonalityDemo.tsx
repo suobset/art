@@ -121,10 +121,6 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
   const result = useMemo(() => search(algorithm, walls, start, end, heuristicStrength), [algorithm, walls, start, end, heuristicStrength])
 
   useEffect(() => {
-    setStepIndex(0)
-  }, [result])
-
-  useEffect(() => {
     if (!playing || reducedMotion) return
     const timer = window.setInterval(() => {
       setStepIndex((index) => {
@@ -151,15 +147,15 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
             <button type="button" onClick={() => setStepIndex((index) => index + 1)} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               step
             </button>
-            <button type="button" onClick={() => setWalls(makeMaze(mazeDensity))} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStepIndex(0) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               regenerate maze
             </button>
-            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStart({ x: 1, y: 1 }); setEnd({ x: columns - 2, y: rows - 2 }) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
+            <button type="button" onClick={() => { setWalls(makeMaze(mazeDensity)); setStart({ x: 1, y: 1 }); setEnd({ x: columns - 2, y: rows - 2 }); setStepIndex(0) }} className="rounded-full border border-[var(--line)] px-3 py-2 text-sm text-[var(--text)]">
               reset
             </button>
           </div>
           <Parameter label="algorithm">
-            <select value={algorithm} onChange={(event) => setAlgorithm(event.target.value as Algorithm)} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
+            <select value={algorithm} onChange={(event) => { setAlgorithm(event.target.value as Algorithm); setStepIndex(0) }} className="rounded-xl border border-[var(--line)] bg-transparent px-3 py-2">
               <option value="bfs" className="bg-[#120f15]">bfs</option>
               <option value="dfs" className="bg-[#120f15]">dfs</option>
               <option value="dijkstra" className="bg-[#120f15]">dijkstra</option>
@@ -170,7 +166,7 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
             <input type="range" min="0.1" max="0.42" step="0.02" value={mazeDensity} onChange={(event) => setMazeDensity(Number(event.target.value))} />
           </Parameter>
           <Parameter label="heuristic strength" value={heuristicStrength.toFixed(1)}>
-            <input type="range" min="0" max="2" step="0.1" value={heuristicStrength} onChange={(event) => setHeuristicStrength(Number(event.target.value))} />
+            <input type="range" min="0" max="2" step="0.1" value={heuristicStrength} onChange={(event) => { setHeuristicStrength(Number(event.target.value)); setStepIndex(0) }} />
           </Parameter>
           <Parameter label="speed" value={`${speed}ms`}>
             <input type="range" min="30" max="200" step="10" value={speed} onChange={(event) => setSpeed(Number(event.target.value))} />
@@ -217,14 +213,17 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
                     next[y][x] = !next[y][x]
                     return next
                   })
+                  setStepIndex(0)
                 }}
                 onPointerEnter={(event) => {
                   if (dragging === 'start') {
                     setStart({ x, y })
+                    setStepIndex(0)
                     return
                   }
                   if (dragging === 'end') {
                     setEnd({ x, y })
+                    setStepIndex(0)
                     return
                   }
                   if (event.buttons === 1) {
@@ -234,6 +233,7 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
                       next[y][x] = true
                       return next
                     })
+                    setStepIndex(0)
                   }
                 }}
                 onPointerUp={() => setDragging(null)}
@@ -245,6 +245,7 @@ export function PathfindingPersonalityDemo({ reducedMotion }: DemoComponentProps
                       next[y][x] = !next[y][x]
                       return next
                     })
+                    setStepIndex(0)
                   }
                 }}
                 className="aspect-square rounded-[4px]"
