@@ -10,7 +10,7 @@ export function Footer({ author }: { author: { shortName: string; blog: string; 
           </div>
           <div>
             <p className="meta-label mb-3">field links</p>
-            <p className="text-sm text-[var(--text-muted)]">Visit <a href={author.blog} className="text-[var(--accent-2)] underline-offset-4 hover:underline">declarative</a>, browse <a href={author.resume} className="text-[var(--accent-2)] underline-offset-4 hover:underline">resume</a>, or share the gallery from <a href={author.artDomain} className="text-[var(--accent-2)] underline-offset-4 hover:underline">art.skushagra.com</a>.</p>
+            <p className="text-sm text-[var(--text-muted)]">Visit <a href={author.blog} className="text-[var(--accent-2)] underline-offset-4 hover:underline">declarative</a>, browse <a href={author.resume} className="text-[var(--accent-2)] underline-offset-4 hover:underline">resume</a>, view <a href="https://github.com/suobset/art" className="text-[var(--accent-2)] underline-offset-4 hover:underline">source code</a>, or share the gallery from <a href={author.artDomain} className="text-[var(--accent-2)] underline-offset-4 hover:underline">art.skushagra.com</a>.</p>
           </div>
           <div>
             <p className="meta-label mb-3">rights</p>
@@ -18,7 +18,7 @@ export function Footer({ author }: { author: { shortName: string; blog: string; 
           </div>
         </div>
         <div className="mt-6 grid gap-3 border-t border-[var(--rule)] pt-4 text-xs text-[var(--text-faint)] md:grid-cols-[1fr_auto] md:items-center">
-          <span>Built for the open web, with room labels, source notes, and no decorative fluff standing in for the work.</span>
+          <span>Built for the Open Web.</span>
           <span>{author.shortName} · <a href={author.site} className="hover:text-[var(--text)]">skushagra.com</a> · MIT</span>
         </div>
       </div>
