@@ -11,6 +11,8 @@ import { ShaderWithoutShadersDemo } from './ShaderWithoutShadersDemo'
 import { SortingChoreographyDemo } from './SortingChoreographyDemo'
 import { SourceRemixDemo } from './SourceRemixDemo'
 
+const repoRoot = 'https://github.com/suobset/art/blob/main'
+
 export const demos: DemoDefinition[] = [
   {
     id: 'gesture',
@@ -20,6 +22,10 @@ export const demos: DemoDefinition[] = [
     tags: ['canvas', 'motion', 'seeded'],
     component: FlowFieldDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/FlowFieldDemo.tsx',
+        href: `${repoRoot}/src/demos/FlowFieldDemo.tsx`,
+      },
       overview: 'Each particle acts like a tiny brush hair. It does not know the whole painting. It only asks the field which way to lean next, and the accumulation of those tiny decisions becomes a stroke.',
       explanation: [
         'A flow field is just a function that returns a direction for any point on the canvas. In this demo, that direction comes from a few layered sine and cosine waves plus a pointer disturbance.',
@@ -61,6 +67,10 @@ export const demos: DemoDefinition[] = [
     tags: ['grid', 'constraint', 'ascii'],
     component: PixelConstraintDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/PixelConstraintDemo.tsx',
+        href: `${repoRoot}/src/demos/PixelConstraintDemo.tsx`,
+      },
       overview: 'This piece starts with a severe limit: 32 columns, 18 rows, and a tiny palette. That limit is not there to imitate technical weakness. It is there to create a specific kind of visual thinking.',
       explanation: [
         'The image is just a two-dimensional array of small integers. A cell value of 0 might mean background; 1, 2, and 3 choose other palette entries. The display is simply a readable skin over those numbers.',
@@ -101,6 +111,10 @@ export const demos: DemoDefinition[] = [
     tags: ['algorithm', 'tempo', 'comparison'],
     component: SortingChoreographyDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/SortingChoreographyDemo.tsx',
+        href: `${repoRoot}/src/demos/SortingChoreographyDemo.tsx`,
+      },
       overview: 'All four algorithms solve the same problem, but they move through it with strikingly different rhythms. The point is not merely that they differ in complexity; it is that they feel different in motion.',
       explanation: [
         'The demo precomputes a sequence of states called steps. Each step contains a snapshot of the values plus the bars currently being compared or swapped. The animation is just a performer walking through that score.',
@@ -145,6 +159,10 @@ export const demos: DemoDefinition[] = [
     tags: ['rules', 'emergence', 'grid'],
     component: CellularAutomataDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/CellularAutomataDemo.tsx',
+        href: `${repoRoot}/src/demos/CellularAutomataDemo.tsx`,
+      },
       overview: 'Each cell knows almost nothing. It only checks its immediate neighbors. The surprise is that tiny local logic can still produce large-scale texture, growth, collapse, and drift.',
       explanation: [
         'A cellular automaton advances in generations. On each generation, every cell counts nearby live cells and decides whether it should be alive in the next frame.',
@@ -185,6 +203,10 @@ export const demos: DemoDefinition[] = [
     tags: ['language', 'grammar', 'remix'],
     component: GenerativePoetryDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/GenerativePoetryDemo.tsx',
+        href: `${repoRoot}/src/demos/GenerativePoetryDemo.tsx`,
+      },
       overview: 'This poem generator is deliberately small, local, and legible. It uses hand-written word banks and a simple grammar rather than a remote model or an attempt to imitate human consciousness.',
       explanation: [
         'A mood selects a vocabulary bank. That bank contains nouns, verbs, textures, and places. The generator then assembles lines by choosing words from those buckets according to a visible template.',
@@ -230,6 +252,10 @@ export const demos: DemoDefinition[] = [
     tags: ['svg', 'recursion', 'growth'],
     component: RecursiveGardenDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/RecursiveGardenDemo.tsx',
+        href: `${repoRoot}/src/demos/RecursiveGardenDemo.tsx`,
+      },
       overview: 'A recursive drawing is a rule that calls itself. A branch makes smaller branches, which make smaller branches, until the structure decides it has said enough.',
       explanation: [
         'The tree begins with one trunk segment. From the end of that segment, the program recursively spawns child branches with smaller lengths and changed angles.',
@@ -270,6 +296,10 @@ export const demos: DemoDefinition[] = [
     tags: ['canvas', 'math', 'light'],
     component: ShaderWithoutShadersDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/ShaderWithoutShadersDemo.tsx',
+        href: `${repoRoot}/src/demos/ShaderWithoutShadersDemo.tsx`,
+      },
       overview: 'This piece imitates some of the visual logic people associate with shaders, but it does it in ordinary canvas code. The glow comes from arithmetic patterns, not from a 3D pipeline.',
       explanation: [
         'Each visible block samples a few mathematical functions: horizontal waves, vertical ripples, and a radial flare based on distance from an apparent light source.',
@@ -310,6 +340,10 @@ export const demos: DemoDefinition[] = [
     tags: ['type', 'motion', 'layout'],
     component: KineticTypeDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/KineticTypeDemo.tsx',
+        href: `${repoRoot}/src/demos/KineticTypeDemo.tsx`,
+      },
       overview: 'This is not typography as a frozen layout. Each letter is treated as an actor with state: it can lean, drift, bunch up, and settle differently depending on the forces around it.',
       explanation: [
         'The phrase is split into characters, and each character gets a position derived from its index plus a dynamic offset based on pointer location and the current control values.',
@@ -351,6 +385,10 @@ export const demos: DemoDefinition[] = [
     tags: ['search', 'grid', 'comparison'],
     component: PathfindingPersonalityDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/PathfindingPersonalityDemo.tsx',
+        href: `${repoRoot}/src/demos/PathfindingPersonalityDemo.tsx`,
+      },
       overview: 'Pathfinding is usually presented as a sober engineering task: find a route from A to B. This piece keeps the task intact but makes the search behavior itself visible and characterful.',
       explanation: [
         'The maze is a grid of walls and open cells. Start and end points define the problem. The interesting part is how the search frontier expands through that space.',
@@ -391,6 +429,10 @@ export const demos: DemoDefinition[] = [
     tags: ['source', 'parser', 'remix'],
     component: SourceRemixDemo,
     behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/SourceRemixDemo.tsx',
+        href: `${repoRoot}/src/demos/SourceRemixDemo.tsx`,
+      },
       overview: 'The artwork is not only the flower-like image. It is also the tiny readable program that generates it. Changing a few constants is enough to move the work from one personality to another.',
       explanation: [
         'The editable text area is intentionally constrained. Visitors are not asked to write arbitrary JavaScript. They are asked to modify a small, safe vocabulary of numeric constants.',

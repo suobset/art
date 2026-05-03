@@ -7,6 +7,10 @@ export type DemoComponentProps = {
 export type BehindTheScenesData = {
   overview: string
   explanation: string[]
+  sourceFile: {
+    label: string
+    href: string
+  }
   parameters: Array<{
     name: string
     meaning: string

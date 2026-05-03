@@ -17,6 +17,17 @@ export function BehindTheScenes({ data, whyArt }: { data: BehindTheScenesData; w
           </div>
         </section>
         <section>
+          <h4 className="mb-2 text-base text-[var(--text)]">Source file</h4>
+          <a
+            href={data.sourceFile.href}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex rounded-full border border-[var(--line)] px-3 py-2 text-xs text-[var(--text)] transition hover:border-[var(--accent-2)]"
+          >
+            {data.sourceFile.label}
+          </a>
+        </section>
+        <section>
           <h4 className="mb-2 text-base text-[var(--text)]">Code walkthrough</h4>
           <div className="space-y-4">
             {data.snippets.map((snippet) => (
