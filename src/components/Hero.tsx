@@ -16,12 +16,14 @@ type HeroProps = {
     blog: string
     about: string
     projects: string
+    bio: string
+    summary: string
   }
   reducedMotion: boolean
 }
 
 export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
-  const [offsets, setOffsets] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+  const [offsets, setOffsets] = useState(Array.from({ length: 16 }, () => 0))
   const [remix, setRemix] = useState(0)
 
   const letters = useMemo(
@@ -35,9 +37,9 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
   )
 
   return (
-    <section id="top" className="relative mx-auto flex min-h-[96svh] w-full max-w-7xl flex-col justify-center gap-10 px-4 py-8 md:px-6 md:py-12">
-      <div className="pointer-events-none absolute inset-x-0 top-10 h-80 bg-[radial-gradient(circle_at_center,rgba(255,122,89,0.16),transparent_45%),radial-gradient(circle_at_70%_30%,rgba(107,227,255,0.2),transparent_30%)] blur-3xl" />
-      <div className="relative grid items-end gap-8 lg:grid-cols-[1.45fr_0.55fr]">
+    <section id="top" className="relative mx-auto flex min-h-[98svh] w-full max-w-7xl flex-col justify-center gap-10 px-4 py-8 md:px-6 md:py-12">
+      <div className="pointer-events-none absolute inset-x-0 top-8 h-[28rem] bg-[radial-gradient(circle_at_20%_30%,rgba(255,122,89,0.2),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(107,227,255,0.18),transparent_30%),radial-gradient(circle_at_center,rgba(216,255,98,0.08),transparent_40%)] blur-3xl" />
+      <div className="relative grid items-end gap-8 lg:grid-cols-[1.55fr_0.45fr]">
         <div>
           <p className="mb-5 text-sm uppercase tracking-[0.34em] text-[var(--soft)]">{manifesto.eyebrow}</p>
           <div
@@ -55,7 +57,7 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
                 key={`${letter}-${index}-${remix}`}
                 animate={{ y: reducedMotion ? 0 : y, rotate: reducedMotion ? 0 : tilt }}
                 transition={{ type: 'spring', stiffness: 150, damping: 15 }}
-                className={`select-none font-[var(--hero-font)] text-[clamp(3.6rem,11vw,8.8rem)] leading-none tracking-[-0.12em] ${letter === '+' ? 'mx-2 text-[var(--accent-2)]' : 'text-[var(--text)]'}`}
+                className={`select-none font-[var(--hero-font)] text-[clamp(3.6rem,11vw,9rem)] leading-none tracking-[-0.12em] ${letter === '+' ? 'mx-2 text-[var(--accent-2)]' : 'text-[var(--text)]'}`}
               >
                 {letter === ' ' ? '\u00A0' : letter}
               </motion.span>
@@ -67,7 +69,7 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/demo/gesture" className="rounded-full bg-[var(--text)] px-6 py-3 text-sm font-medium text-[var(--bg)] transition hover:translate-y-[-1px]">
+            <Link to="/demo/gesture" className="rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-medium text-black transition hover:translate-y-[-1px] hover:bg-[var(--accent-3)]">
               Enter the first room
             </Link>
             <button
@@ -86,7 +88,8 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
           <img src={author.portrait} alt={author.shortName} className="mb-4 aspect-[4/5] w-full rounded-[1.5rem] object-cover object-center" />
           <p className="mb-2 text-xs uppercase tracking-[0.28em] text-[var(--soft)]">curated by</p>
           <h2 className="font-[var(--hero-font)] text-3xl tracking-[-0.04em] text-[var(--text)]">{author.shortName}</h2>
-          <p className="mt-2 text-sm text-[var(--muted)]">{author.fullName} writes {author.blogLabel} and built this space as a meeting point between expressive image-making and precise systems thinking.</p>
+          <p className="mt-2 text-sm text-[var(--accent-3)]">{author.summary}</p>
+          <p className="mt-3 text-sm text-[var(--muted)]">{author.bio}</p>
           <div className="mt-4 flex flex-wrap gap-2 text-sm">
             <a href={author.blog} className="rounded-full border border-[var(--line)] px-3 py-2 text-[var(--text)] transition hover:border-[var(--accent)]">read declarative</a>
             <a href={author.about} className="rounded-full border border-[var(--line)] px-3 py-2 text-[var(--text)] transition hover:border-[var(--accent)]">about kush</a>

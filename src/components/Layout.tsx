@@ -27,7 +27,13 @@ export function Layout({
           <Link to="/" className="font-[var(--hero-font)] text-2xl tracking-[-0.08em] text-[var(--text)]">
             art + algorithms
           </Link>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <a
+              href="https://skushagra.com"
+              className="rounded-full border border-[var(--line)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm text-[var(--text)] transition hover:border-[var(--accent-2)]"
+            >
+              Created by Kush S.
+            </a>
             <Toggle pressed={paperMode} onPressedChange={onTogglePaperMode}>
               {paperMode ? 'night mode' : 'paper mode'}
             </Toggle>

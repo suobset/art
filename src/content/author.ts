@@ -9,4 +9,6 @@ export const author = {
   about: 'https://skushagra.com/about/',
   projects: 'https://skushagra.com/projects/',
   resume: 'https://skushagra.com/resume/',
+  bio: 'Kushagra Srivastava works across operating systems, compilers, and cybersecurity; he writes declarative and builds systems software with a close eye on how computers actually work.',
+  summary: 'Operating systems, compilers, cybersecurity, and expressive software.',
 }

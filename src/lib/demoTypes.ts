@@ -5,13 +5,19 @@ export type DemoComponentProps = {
 }
 
 export type BehindTheScenesData = {
-  concept: string
-  codeExcerpt: string
+  overview: string
+  explanation: string[]
   parameters: Array<{
     name: string
     meaning: string
   }>
+  snippets: Array<{
+    title: string
+    code: string
+    note: string
+  }>
   tryThis: string[]
+  distinctions?: string[]
 }
 
 export type DemoDefinition = {
