@@ -105,6 +105,12 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
             <a href="#source-philosophy" className="control-button" data-variant="ghost">
               View source philosophy
             </a>
+            <a href="https://github.com/suobset/art" className="control-button" data-variant="ghost">
+              Source Code
+            </a>
+            <a href="https://github.com/sponsors/suobset" className="control-button" data-variant="ghost">
+              Support on GitHub
+            </a>
           </div>
         </div>
         <aside className="surface-placard px-4 py-4 md:px-5 md:py-5">
@@ -119,7 +125,6 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
             <a href={author.blog} className="control-button" data-variant="ghost">declarative {'->'}</a>
             <a href={author.about} className="control-button" data-variant="ghost">about kush {'->'}</a>
             <a href={author.projects} className="control-button" data-variant="ghost">projects {'->'}</a>
-            <a href="https://github.com/sponsors/suobset" className="control-button" data-variant="ghost">support on github {'->'}</a>
           </div>
         </aside>
       </div>
