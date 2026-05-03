@@ -35,6 +35,10 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
     [manifesto.title, offsets, remix],
   )
 
+  const splitIndex = manifesto.title.indexOf('a', 5)
+  const firstLine = letters.slice(0, splitIndex)
+  const secondLine = letters.slice(splitIndex)
+
   return (
     <section id="top" className="relative mx-auto flex min-h-[98svh] w-full max-w-7xl flex-col justify-center gap-10 px-4 py-8 md:px-6 md:py-12">
       <div className="pointer-events-none absolute inset-x-0 top-8 bottom-16 notebook-grid opacity-40" />
@@ -44,7 +48,6 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
           <div className="mb-5 flex flex-wrap items-center gap-3">
             <p className="meta-label">{manifesto.eyebrow}</p>
             <span className="h-px w-12 bg-[var(--accent-2)]" />
-            <span className="font-[var(--mono-font)] text-xs text-[var(--text-faint)]">floor map / entry</span>
           </div>
           <div
             className="title-guide mb-8"
@@ -56,18 +59,31 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
             }}
             onPointerLeave={() => setOffsets(Array.from({ length: manifesto.title.length }, () => 0))}
           >
-            <div className="mb-2 font-[var(--mono-font)] text-[0.72rem] uppercase tracking-[0.28em] text-[var(--text-faint)]">specimen title</div>
-            <div className="flex flex-wrap items-end gap-x-2 gap-y-1 md:gap-x-4">
-              {letters.map(({ letter, tilt, y }, index) => (
-                <motion.span
-                  key={`${letter}-${index}-${remix}`}
-                  animate={{ y: reducedMotion ? 0 : y, rotate: reducedMotion ? 0 : tilt }}
-                  transition={{ type: 'spring', stiffness: 150, damping: 15 }}
-                  className={`select-none font-[var(--hero-font)] text-[clamp(3.8rem,11vw,9rem)] leading-none tracking-[-0.12em] ${letter === '+' ? 'mx-2 text-[var(--accent-2)]' : letter === 'a' && index > 4 ? 'italic text-[var(--text)]' : 'text-[var(--text)]'}`}
-                >
-                  {letter === ' ' ? '\u00A0' : letter}
-                </motion.span>
-              ))}
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-end gap-x-2 gap-y-1 md:gap-x-4">
+                {firstLine.map(({ letter, tilt, y }, index) => (
+                  <motion.span
+                    key={`${letter}-${index}-${remix}-top`}
+                    animate={{ y: reducedMotion ? 0 : y, rotate: reducedMotion ? 0 : tilt }}
+                    transition={{ type: 'spring', stiffness: 150, damping: 15 }}
+                    className={`select-none font-[var(--hero-font)] text-[clamp(3.9rem,11vw,8.8rem)] leading-none tracking-[-0.12em] ${letter === '+' ? 'mx-2 text-[var(--accent-2)]' : 'text-[var(--text)]'}`}
+                  >
+                    {letter === ' ' ? '\u00A0' : letter}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="flex flex-wrap items-end gap-x-2 gap-y-1 md:gap-x-4">
+                {secondLine.map(({ letter, tilt, y }, index) => (
+                  <motion.span
+                    key={`${letter}-${index}-${remix}-bottom`}
+                    animate={{ y: reducedMotion ? 0 : y, rotate: reducedMotion ? 0 : tilt }}
+                    transition={{ type: 'spring', stiffness: 150, damping: 15 }}
+                    className="select-none font-[var(--hero-font)] text-[clamp(3.9rem,11vw,8.8rem)] leading-none tracking-[-0.12em] text-[var(--text)]"
+                  >
+                    {letter === ' ' ? '\u00A0' : letter}
+                  </motion.span>
+                ))}
+              </div>
             </div>
           </div>
           <div className="max-w-3xl space-y-3 text-xl text-[var(--text-muted)] md:text-2xl md:leading-relaxed">
@@ -94,7 +110,6 @@ export function Hero({ manifesto, author, reducedMotion }: HeroProps) {
         <aside className="surface-placard px-4 py-4 md:px-5 md:py-5">
           <div className="mb-3 flex items-center justify-between gap-3">
             <span className="meta-label">curated by</span>
-            <span className="font-[var(--mono-font)] text-[0.68rem] uppercase tracking-[0.18em] text-[var(--text-faint)]">field note 001</span>
           </div>
           <img src={author.portrait} alt={author.shortName} className="mb-4 aspect-[4/5] w-full rounded-[1.1rem_0.5rem_1.2rem_0.55rem] object-cover object-center" />
           <h2 className="font-[var(--hero-font)] text-3xl tracking-[-0.04em] text-[var(--text)]">{author.shortName}</h2>

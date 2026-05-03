@@ -27,11 +27,6 @@ export function Layout({
             <Link to="/" className="technical-rule pt-3 font-[var(--hero-font)] text-2xl tracking-[-0.08em] text-[var(--text)] md:text-[1.7rem]">
               art + algorithms
             </Link>
-            <div className="hidden items-center gap-2 md:flex">
-              <span className="meta-label">room atlas</span>
-              <span className="h-px w-10 bg-[var(--rule-strong)]" />
-              <span className="font-[var(--mono-font)] text-xs text-[var(--text-faint)]">AA-001</span>
-            </div>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
             <a
