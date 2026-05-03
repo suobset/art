@@ -1,11 +1,15 @@
 import { demoLabels } from '../content/demoCopy'
 import type { DemoDefinition } from '../lib/demoTypes'
-import { FlowFieldDemo } from './FlowFieldDemo'
-import { PixelConstraintDemo } from './PixelConstraintDemo'
-import { SortingChoreographyDemo } from './SortingChoreographyDemo'
 import { CellularAutomataDemo } from './CellularAutomataDemo'
+import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
+import { KineticTypeDemo } from './KineticTypeDemo'
+import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
+import { PixelConstraintDemo } from './PixelConstraintDemo'
 import { RecursiveGardenDemo } from './RecursiveGardenDemo'
+import { ShaderWithoutShadersDemo } from './ShaderWithoutShadersDemo'
+import { SortingChoreographyDemo } from './SortingChoreographyDemo'
+import { SourceRemixDemo } from './SourceRemixDemo'
 
 export const demos: DemoDefinition[] = [
   {
@@ -71,9 +75,7 @@ export const demos: DemoDefinition[] = [
     component: CellularAutomataDemo,
     behindTheScenes: {
       concept: 'Each cell only checks nearby cells. The surprise comes from how those tiny decisions propagate across the whole plane.',
-      codeExcerpt: `const neighbors = countNeighbors(world, x, y)
-if (cell === 1) return survive.has(neighbors) ? 1 : 0
-return birth.has(neighbors) ? 1 : 0`,
+      codeExcerpt: `const neighbors = countNeighbors(world, x, y)\nif (cell === 1) return survive.has(neighbors) ? 1 : 0\nreturn birth.has(neighbors) ? 1 : 0`,
       parameters: [
         { name: 'birth values', meaning: 'Neighbor counts that create new cells.' },
         { name: 'survival values', meaning: 'Neighbor counts that keep existing cells alive.' },
@@ -91,9 +93,7 @@ return birth.has(neighbors) ? 1 : 0`,
     component: GenerativePoetryDemo,
     behindTheScenes: {
       concept: 'The poem is built from hand-written banks and a clear template. Locking a word turns the system into a constrained revision partner.',
-      codeExcerpt: `line := noun + verb + optional texture + place
-if (lockedWord) noun = lockedWord
-texture appears more often as temperature rises`,
+      codeExcerpt: `line := noun + verb + optional texture + place\nif (lockedWord) noun = lockedWord\ntexture appears more often as temperature rises`,
       parameters: [
         { name: 'mood', meaning: 'Swaps the vocabulary set.' },
         { name: 'temperature', meaning: 'Raises the chance of detours and texture phrases.' },
@@ -111,8 +111,7 @@ texture appears more often as temperature rises`,
     component: RecursiveGardenDemo,
     behindTheScenes: {
       concept: 'Each branch calls for smaller branches. Variation in angle, depth, and asymmetry stops the repetition from feeling mechanical.',
-      codeExcerpt: `grow(x2, y2, nextLength, angle + spread, depth - 1)
-grow(x2, y2, nextLength, angle - spread, depth - 1)`,
+      codeExcerpt: `grow(x2, y2, nextLength, angle + spread, depth - 1)\ngrow(x2, y2, nextLength, angle - spread, depth - 1)`,
       parameters: [
         { name: 'depth', meaning: 'How many times the tree remembers to branch.' },
         { name: 'asymmetry', meaning: 'How much the left and right decisions differ.' },
@@ -121,5 +120,76 @@ grow(x2, y2, nextLength, angle - spread, depth - 1)`,
       tryThis: ['Increase asymmetry until the tree starts to feel weathered rather than idealized.', 'Switch seasons without changing the seed to see palette act like lighting design.'],
     },
   },
-
+  {
+    id: 'light',
+    title: demoLabels.shader,
+    shortDescription: 'A luminous pattern built from arithmetic alone: waves, distance, and color mapping without WebGL.',
+    whyArt: 'Arithmetic can glow.',
+    tags: ['canvas', 'math', 'light'],
+    component: ShaderWithoutShadersDemo,
+    behindTheScenes: {
+      concept: 'Sine waves, radial distance, and color quantization combine into something that looks lit from inside.',
+      codeExcerpt: `const wave = sin((x * frequency + phase) * 3.1)\nconst flare = sin(radius * 16 - time * 3)\nconst brightness = clamp((wave + flare + 2) / 4, 0, 1)`,
+      parameters: [
+        { name: 'frequency', meaning: 'How tightly the wave bands repeat.' },
+        { name: 'distortion', meaning: 'How much the pattern refuses smooth regularity.' },
+        { name: 'resolution', meaning: 'How coarse or fine the fake pixels feel.' },
+      ],
+      tryThis: ['Lower the resolution until the image becomes a woven screen instead of a gradient.', 'Pause the animation and move the pointer to compose a still frame.'],
+    },
+  },
+  {
+    id: 'type',
+    title: demoLabels.type,
+    shortDescription: 'A typographic stage where letters act like bodies with weight, spring, and personal space.',
+    whyArt: 'Words do not have to sit still.',
+    tags: ['type', 'motion', 'layout'],
+    component: KineticTypeDemo,
+    behindTheScenes: {
+      concept: 'Each letter gets its own transform based on pointer position, spacing, and a few force-like parameters. Layout becomes choreography.',
+      codeExcerpt: `offsetX = pointerPull * intensity\noffsetY = sin(index + pointer.x) * elasticity - gravity\nrotate = mix(-10, 10, pointer.y)`,
+      parameters: [
+        { name: 'gravity', meaning: 'How much letters sink back toward a baseline.' },
+        { name: 'elasticity', meaning: 'How springy the rebound feels.' },
+        { name: 'spacing', meaning: 'How much breathing room the phrase gets.' },
+      ],
+      tryThis: ['Type a short phrase with repeating letters and move the pointer slowly across it.', 'Drop motion intensity to zero and then bring it back to feel the composition wake up.'],
+    },
+  },
+  {
+    id: 'maze',
+    title: demoLabels.pathfinding,
+    shortDescription: 'A maze where different search strategies feel cautious, greedy, exhaustive, or impulsive.',
+    whyArt: 'Even problem solving has temperament.',
+    tags: ['search', 'grid', 'comparison'],
+    component: PathfindingPersonalityDemo,
+    behindTheScenes: {
+      concept: 'The path may be similar, but the search frontier expands with a different personality depending on the algorithm and heuristic pressure.',
+      codeExcerpt: `priority = cost + heuristic(next, end) * heuristicStrength\nfrontier.push({ point: next, cost, priority })`,
+      parameters: [
+        { name: 'algorithm', meaning: 'Changes whether search feels broad, deep, patient, or goal-hungry.' },
+        { name: 'heuristic strength', meaning: 'Pushes A* toward greed or restraint.' },
+        { name: 'maze density', meaning: 'Controls how much resistance the search meets.' },
+      ],
+      tryThis: ['Set heuristic strength to zero and compare A* to Dijkstra.', 'Drag the end point into a corner and watch DFS wander before it commits.'],
+    },
+  },
+  {
+    id: 'source',
+    title: demoLabels.source,
+    shortDescription: 'A small live-edit piece where the audience touches the procedure, not only the result.',
+    whyArt: 'Open source lets the audience touch the process.',
+    tags: ['source', 'parser', 'remix'],
+    component: SourceRemixDemo,
+    behindTheScenes: {
+      concept: 'Only a few constants are editable, but that is enough to expose the work as readable procedure instead of a sealed image.',
+      codeExcerpt: `if (!line.matches(allowedPattern)) showGentleError()\nconstants[name] = Number(value)\nredraw(constants)`,
+      parameters: [
+        { name: 'orbit', meaning: 'How fast the petal controls cycle around the center.' },
+        { name: 'petals', meaning: 'How many strokes the figure remembers to draw.' },
+        { name: 'jitter', meaning: 'How much each petal slips away from perfect symmetry.' },
+      ],
+      tryThis: ['Change one number at a time and notice how little source is needed to redirect the whole image.', 'Try an invalid line and see how the piece protects the edit without pretending nothing happened.'],
+    },
+  },
 ]
