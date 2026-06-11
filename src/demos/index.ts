@@ -1,7 +1,7 @@
 import { demoLabels } from '../content/demoCopy'
 import type { DemoDefinition } from '../lib/demoTypes'
-import { CameraLensDemo } from './CameraLensDemo'
 import { AttractorDemo } from './AttractorDemo'
+import { CameraLensDemo } from './CameraLensDemo'
 import { CellularAutomataDemo } from './CellularAutomataDemo'
 import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
