@@ -1,5 +1,6 @@
 import { demoLabels } from '../content/demoCopy'
 import type { DemoDefinition } from '../lib/demoTypes'
+import { CameraLensDemo } from './CameraLensDemo'
 import { CellularAutomataDemo } from './CellularAutomataDemo'
 import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
@@ -564,6 +565,60 @@ export const demos: DemoDefinition[] = [
         'Set the angle to 137.50 and walk it down by 0.05 — the geometry rearranges visibly with each tick.',
         'Drop points to 200 and trail to 0.06 to see a constellation drawing its own gestures.',
         'Switch to torus and raise twist; the donut starts to look braided.',
+      ],
+    },
+  },
+  {
+    id: 'lens',
+    title: demoLabels.lens,
+    shortDescription: 'Your webcam, reinterpreted as ASCII characters, halftone dots, contour bands, or a kaleidoscope of mirrored slices.',
+    whyArt: 'A camera is also a sentence about resolution.',
+    tags: ['camera', 'halftone', 'kaleidoscope'],
+    component: CameraLensDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/CameraLensDemo.tsx',
+        href: `${repoRoot}/src/demos/CameraLensDemo.tsx`,
+      },
+      overview: 'A live camera feed is just a stream of frames. Each frame is a grid of red, green, and blue numbers. This piece downsamples those numbers, converts them to a single brightness value per tile, and chooses a way to draw that brightness — a character, a dot, a band, or a kaleidoscope wedge.',
+      explanation: [
+        'Camera permission is requested explicitly and the stream is never sent over the network. All processing happens in the same browser tab and the stream is released when you stop the camera.',
+        'Each frame is mirrored horizontally so the experience feels like a mirror rather than a security camera. The mirroring happens on a hidden canvas before sampling, so every mode benefits from it.',
+        'The four lenses are different choices about what counts as a pixel. ASCII picks a character from a luminance ramp. Halftone draws variable-radius circles. Contour quantizes brightness into a small number of bands. Kaleidoscope clips the canvas into wedges and stamps the same sample into each one.',
+      ],
+      parameters: [
+        { name: 'lens', meaning: 'Which interpreter renders the frame.' },
+        { name: 'tile size', meaning: 'How big each sample is. Smaller tiles read as detailed, larger tiles read as graphic.' },
+        { name: 'contrast', meaning: 'A gamma-style curve applied to luminance before palette lookup.' },
+        { name: 'mirror slices', meaning: 'Only used by the kaleidoscope lens — how many wedges share the same sample.' },
+        { name: 'palette', meaning: 'How brightness becomes color. Mono and paper are friendly to print; lagoon and magma push toward photographic.' },
+      ],
+      snippets: [
+        {
+          title: 'Permission is requested explicitly',
+          code: `const stream = await navigator.mediaDevices.getUserMedia({\n  video: { width: { ideal: 640 }, height: { ideal: 360 }, facingMode: 'user' },\n  audio: false,\n})`,
+          note: 'The browser shows its own prompt. If you decline, the piece falls back to its idle card and tells you why nothing is rendering.',
+        },
+        {
+          title: 'Frames are sampled on a tiny canvas',
+          code: `sampleCtx.save()\nsampleCtx.translate(targetWidth, 0)\nsampleCtx.scale(-1, 1)\nsampleCtx.drawImage(video, 0, 0, targetWidth, targetHeight)\nsampleCtx.restore()\nconst frame = sampleCtx.getImageData(0, 0, targetWidth, targetHeight)`,
+          note: 'The downsample is the whole point. Throwing away pixels is what makes the interpretation feel like authorship instead of a webcam preview.',
+        },
+        {
+          title: 'A character can be a pixel',
+          code: `const luminance = Math.pow((0.299 * r + 0.587 * g + 0.114 * b) / 255, contrastPow)\nconst charIndex = Math.floor(luminance * (ASCII_RAMP.length - 0.001))\nctx.fillText(ASCII_RAMP[charIndex], x, y)`,
+          note: 'A character has a measurable ink density. That single fact lets text become an image.',
+        },
+      ],
+      tryThis: [
+        'Switch to ASCII at the largest tile size and read your face as a paragraph.',
+        'Raise the mirror slices on the kaleidoscope until your gesture becomes a snowflake.',
+        'Try the paper palette in a brightly lit room for a screen-printed look.',
+      ],
+      distinctions: [
+        'The webcam stream is processed entirely in this browser tab.',
+        'Nothing is uploaded to a server, sent to an AI service, or persisted between sessions.',
+        'Stopping the camera releases the device so the indicator light turns off immediately.',
       ],
     },
   },

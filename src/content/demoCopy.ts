@@ -11,4 +11,5 @@ export const demoLabels = {
   source: 'change the spell',
   diffusion: 'chemistry as draftsman',
   cosmos: 'phyllotaxis cosmos',
+  lens: 'a camera that reads the room',
 }
