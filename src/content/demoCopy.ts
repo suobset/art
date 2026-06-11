@@ -14,4 +14,5 @@ export const demoLabels = {
   lens: 'a camera that reads the room',
   spectrum: 'drone made visible',
   attractor: 'phase space cosmonaut',
+  pond: 'a pond remembers every touch',
 }

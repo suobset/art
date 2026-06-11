@@ -9,6 +9,7 @@ import { KineticTypeDemo } from './KineticTypeDemo'
 import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
 import { PhyllotaxisDemo } from './PhyllotaxisDemo'
 import { PixelConstraintDemo } from './PixelConstraintDemo'
+import { PondDemo } from './PondDemo'
 import { ReactionDiffusionDemo } from './ReactionDiffusionDemo'
 import { RecursiveGardenDemo } from './RecursiveGardenDemo'
 import { ShaderWithoutShadersDemo } from './ShaderWithoutShadersDemo'
@@ -721,6 +722,56 @@ export const demos: DemoDefinition[] = [
         'Run multiple streams on Lorenz and notice they all live on the same butterfly even though they never overlap exactly.',
         'Slow the integration speed to 60 and watch a single trajectory cross itself again and again.',
         'Switch to Thomas and crank trail fade down to 0.04 — the system writes a cursive web.',
+      ],
+    },
+  },
+  {
+    id: 'pond',
+    title: demoLabels.pond,
+    shortDescription: 'A 2D wave equation simulated on a grid. Click to drop pebbles, drag to draw fingerprints, choose still water, breeze, rain, or storm.',
+    whyArt: 'Touch is not removed from the medium. It is the medium.',
+    tags: ['physics', 'simulation', 'water'],
+    component: PondDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/PondDemo.tsx',
+        href: `${repoRoot}/src/demos/PondDemo.tsx`,
+      },
+      overview: 'A pond is just a height field on a grid. Each cell stores how high the water is now and how high it was a moment ago. The wave equation says the next height of a cell is the average of its neighbors\' current heights, minus its own past height, with a tiny loss for friction.',
+      explanation: [
+        'There is no separate "ripple" object. The visible ripples are emergent: thousands of tiny averagings, repeated every frame, drift outward and meet other averagings coming back from the walls.',
+        'Painting injects energy directly into the height field. Dragging the pointer is the same operation many times in a row, which is why a long swipe writes a channel instead of a single dot.',
+        'Damping is the surface tension of the simulation. Set it too low and ripples die instantly. Set it too high and the pond never settles — small mistakes accumulate into noise.',
+      ],
+      parameters: [
+        { name: 'palette', meaning: 'How the height (and its gradient) maps to color. Inkwell is moonlit, copper feels heated, paper looks like printed paper.' },
+        { name: 'weather', meaning: 'Sets the ambient activity. Still is silent; breeze drops a rare pebble; rain and storm scatter many at once.' },
+        { name: 'surface tension', meaning: 'Per-step damping factor. Closer to 1.0 means longer-lived ripples.' },
+        { name: 'propagation steps', meaning: 'How many wave-equation iterations are run between renders. More steps mean faster-moving ripples.' },
+        { name: 'touch intensity', meaning: 'How strongly your pointer (and the weather) imprints the surface.' },
+      ],
+      snippets: [
+        {
+          title: 'One step of the wave equation',
+          code: `const value =\n  (current[i - 1] + current[i + 1] +\n   current[i - width] + current[i + width]) / 2\n  - previous[i]\nprevious[i] = value * damp`,
+          note: 'This single line is the entire physics. Average the neighbors, subtract your own past, lose a touch to friction. Run it everywhere, every frame.',
+        },
+        {
+          title: 'Touching the field is just an injection',
+          code: `for (let yy = -radius; yy <= radius; yy += 1) {\n  for (let xx = -radius; xx <= radius; xx += 1) {\n    if (xx * xx + yy * yy > radius * radius) continue\n    const falloff = 1 - Math.sqrt(xx * xx + yy * yy) / radius\n    current[(y + yy) * width + (x + xx)] += amount * falloff\n  }
+}`,
+          note: 'Drawing into the pond is not a special operation. It is the same field your pointer is editing that the physics is editing.',
+        },
+        {
+          title: 'Color from the gradient',
+          code: `const shade = 0.5 + (value - (left + top) * 0.4) * 0.55\nconst [r, g, b] = paletteSample(palette, shade)`,
+          note: 'The pond is not just shaded by height. It is shaded by the difference between a cell and its neighbors — which is what light from a moving water surface actually looks like.',
+        },
+      ],
+      tryThis: [
+        'Switch to still water, drop one pebble in the center, and watch the reflection patterns form an interference figure.',
+        'Drag a slow curve across the surface and try to make the wake last longer by raising the surface tension.',
+        'Compare rain and storm at the same damping — storm tips the pond toward chaos within a few seconds.',
       ],
     },
   },
