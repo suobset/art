@@ -5,7 +5,6 @@ import { SeedControls } from '../components/SeedControls'
 import { useSeed } from '../hooks/useSeed'
 import { createSafeAudioContext, playTonalNote, type ToneVoice } from '../lib/audio'
 import type { DemoComponentProps } from '../lib/demoTypes'
-import { clamp } from '../lib/geometry'
 import {
   clampMidi,
   degreeToMidi,
@@ -151,7 +150,7 @@ export function CounterpointDemo({ reducedMotion }: DemoComponentProps) {
   const tickRef = useRef<number | null>(null)
   const beatRef = useRef(0)
   const audioContextRef = useRef<AudioContext | null>(null)
-  const { seed, remix, setSeed } = useSeed()
+  const { seed, remix } = useSeed()
 
   const phraseData = useMemo(
     () => makePhrase({ root, scale, phraseLength, motionStyle, intervalRule, range, density, seed }),
@@ -294,7 +293,21 @@ export function CounterpointDemo({ reducedMotion }: DemoComponentProps) {
             </button>
             <button type="button" onClick={reset} className="control-button">reset</button>
             <button type="button" onClick={remixPhrase} className="control-button">remix</button>
-            <SeedControls seed={seed} onRandomize={() => setSeed(seed)} />
+            <SeedControls seed={seed} onRandomize={remixPhrase} />
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(String(seed))
+                  setAudioStatus(`Seed ${seed} copied to clipboard.`)
+                } catch {
+                  setAudioStatus('Clipboard is unavailable, but the current seed stays visible.')
+                }
+              }}
+              className="control-button"
+            >
+              copy seed
+            </button>
           </div>
           <p className="text-sm text-[var(--soft)]">{summary}</p>
           <p className="text-sm text-[var(--soft)]">{audioStatus}</p>
