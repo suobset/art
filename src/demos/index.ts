@@ -5,6 +5,7 @@ import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
 import { KineticTypeDemo } from './KineticTypeDemo'
 import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
+import { PhyllotaxisDemo } from './PhyllotaxisDemo'
 import { PixelConstraintDemo } from './PixelConstraintDemo'
 import { ReactionDiffusionDemo } from './ReactionDiffusionDemo'
 import { RecursiveGardenDemo } from './RecursiveGardenDemo'
@@ -513,6 +514,56 @@ export const demos: DemoDefinition[] = [
         'Pause the reaction and slowly drag a long line — then resume and watch the line become a tributary.',
         'Switch from coral to mitosis with the same seed; the world will rearrange itself within seconds.',
         'Drop kill rate while feed stays the same and notice the texture thickening into puddles.',
+      ],
+    },
+  },
+  {
+    id: 'cosmos',
+    title: demoLabels.cosmos,
+    shortDescription: 'A 3D phyllotaxis field, projected to the canvas with raw matrices. Drag to orbit. Slide the angle to turn a sunflower into a wheel.',
+    whyArt: 'A single irrational number is enough to build a body.',
+    tags: ['3d', 'phyllotaxis', 'projection'],
+    component: PhyllotaxisDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/PhyllotaxisDemo.tsx',
+        href: `${repoRoot}/src/demos/PhyllotaxisDemo.tsx`,
+      },
+      overview: 'Phyllotaxis is the rule sunflowers, pinecones, and cactus spines use to pack seeds without overlap. Each new point is rotated by a fixed angle around the center. When that angle is the golden angle (~137.5°), the packing becomes optimal.',
+      explanation: [
+        'This piece extends the idea into 3D. The same generative rule is wrapped onto a sphere, a torus, a flat disk, and a pollen-like spheroid. The rotation per step is the only thing changing — the shape comes from how that rotation is interpreted.',
+        'There is no 3D library here. The points are rotated by two angles using cosine and sine, then projected to 2D with a simple perspective divide. Depth determines size and alpha, so closer points feel bigger and brighter.',
+        'Dragging the canvas changes the target rotation; the renderer eases toward it. When you let go, an idle orbit keeps the structure breathing.',
+      ],
+      parameters: [
+        { name: 'mode', meaning: 'Selects which surface the phyllotaxis is wrapped onto.' },
+        { name: 'generative angle', meaning: 'The rotation applied between consecutive points. Sliding it half a degree can split a tight spiral into rings.' },
+        { name: 'points', meaning: 'How many points are placed. Larger counts read as cloth; smaller counts read as a constellation.' },
+        { name: 'twist', meaning: 'A secondary winding that controls how the surface flexes (e.g. torus minor angle, spiral height, pollen sway).' },
+        { name: 'point size', meaning: 'How big each projected dot is at the front of the camera.' },
+        { name: 'trail fade', meaning: 'How quickly previous frames disappear. Low fade leaves silky motion trails; high fade keeps the geometry crisp.' },
+      ],
+      snippets: [
+        {
+          title: 'Phyllotaxis on a sphere',
+          code: `for (let i = 0; i < count; i += 1) {\n  const phi = Math.acos(1 - 2 * (i + 0.5) / count)\n  const theta = i * goldenAngleRadians\n  point[i] = {\n    x: Math.sin(phi) * Math.cos(theta),\n    y: Math.sin(phi) * Math.sin(theta),\n    z: Math.cos(phi),\n  }\n}`,
+          note: 'This is the Vogel-style placement on a sphere. The latitude phi gives uniform area; the longitude theta uses the golden angle to avoid clustering.',
+        },
+        {
+          title: 'A tiny perspective projection',
+          code: `const y1 = p.y * cosX - p.z * sinX\nconst z1 = p.y * sinX + p.z * cosX\nconst x2 = p.x * cosY + z1 * sinY\nconst z2 = -p.x * sinY + z1 * cosY\nconst persp = fov / (z2 + fov)`,
+          note: 'Two axis rotations and a divide. That is the whole 3D pipeline this piece uses — no WebGL.',
+        },
+        {
+          title: 'Depth sorts the dots',
+          code: `projected.sort((a, b) => b.depth - a.depth)\nfor (const point of projected) {\n  context.globalAlpha = 1.4 / point.depth\n  context.beginPath()\n  context.arc(point.sx, point.sy, point.r, 0, Math.PI * 2)\n  context.fill()\n}`,
+          note: 'Painter\'s algorithm. The farthest points are drawn first so the closer ones can sit on top of them — depth without a depth buffer.',
+        },
+      ],
+      tryThis: [
+        'Set the angle to 137.50 and walk it down by 0.05 — the geometry rearranges visibly with each tick.',
+        'Drop points to 200 and trail to 0.06 to see a constellation drawing its own gestures.',
+        'Switch to torus and raise twist; the donut starts to look braided.',
       ],
     },
   },

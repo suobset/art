@@ -10,4 +10,5 @@ export const demoLabels = {
   pathfinding: 'the maze has opinions',
   source: 'change the spell',
   diffusion: 'chemistry as draftsman',
+  cosmos: 'phyllotaxis cosmos',
 }
