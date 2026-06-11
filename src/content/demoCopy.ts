@@ -1,8 +1,10 @@
 export const demoLabels = {
   flowField: 'gesture',
   pixelGrid: 'thirty-two by eighteen',
+  rhythm: 'rhythm',
   sorting: 'order learns to dance',
   cellular: 'rules become weather',
+  counterpoint: 'counterpoint',
   poetry: 'machine with a mood',
   garden: 'a tree remembers every choice',
   shader: 'light from arithmetic',
