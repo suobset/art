@@ -44,7 +44,7 @@ export function RhythmDemo({ reducedMotion }: DemoComponentProps) {
   const timerRef = useRef<number | null>(null)
   const stepRef = useRef(0)
   const audioContextRef = useRef<AudioContext | null>(null)
-  const { seed, remix, setSeed } = useSeed()
+  const { seed, remix } = useSeed()
 
   const generatedPattern = useMemo(() => euclideanRhythm(steps, pulses, rotation), [steps, pulses, rotation])
   const pattern = manualPattern ?? generatedPattern
@@ -168,7 +168,21 @@ export function RhythmDemo({ reducedMotion }: DemoComponentProps) {
             <button type="button" onClick={remixPattern} className="control-button">
               remix
             </button>
-            <SeedControls seed={seed} onRandomize={() => setSeed(seed)} />
+            <SeedControls seed={seed} onRandomize={remixPattern} />
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(String(seed))
+                  setAudioStatus(`Seed ${seed} copied to clipboard.`)
+                } catch {
+                  setAudioStatus('Clipboard is unavailable, but the current seed stays visible.')
+                }
+              }}
+              className="control-button"
+            >
+              copy seed
+            </button>
           </div>
           <p className="text-sm text-[var(--soft)]">{currentSummary}</p>
           <p className="text-sm text-[var(--soft)]">{audioStatus}</p>
@@ -219,24 +233,38 @@ export function RhythmDemo({ reducedMotion }: DemoComponentProps) {
               const accented = accents[index]
               const active = playhead === index
               return (
-                <g key={`${index}-${isActive}`}>
-                  <line x1={center} y1={center} x2={x} y2={y} stroke="var(--rule)" strokeWidth="1" opacity={0.45} />
-                  <button
-                    type="button"
-                    aria-label={`step ${index + 1}, ${isActive ? 'active' : 'inactive'}${accented ? ', accented' : ''}`}
-                    onClick={(event) => {
-                      if (event.shiftKey) {
-                        setAccents((current) => current.map((item, accentIndex) => (accentIndex === index ? !item : item)))
-                        return
-                      }
+                <g
+                  key={`${index}-${isActive}`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`step ${index + 1}, ${isActive ? 'active' : 'inactive'}${accented ? ', accented' : ''}`}
+                  className="cursor-pointer"
+                  onClick={(event) => {
+                    if (event.shiftKey) {
+                      setAccents((current) => current.map((item, accentIndex) => (accentIndex === index ? !item : item)))
+                      return
+                    }
+                    const next = [...pattern]
+                    next[index] = !next[index]
+                    setManualPattern(next)
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
                       const next = [...pattern]
                       next[index] = !next[index]
                       setManualPattern(next)
-                    }}
-                    className="cursor-pointer"
-                  />
+                    }
+                    if (event.key.toLowerCase() === 'a') {
+                      event.preventDefault()
+                      setAccents((current) => current.map((item, accentIndex) => (accentIndex === index ? !item : item)))
+                    }
+                  }}
+                >
+                  <line x1={center} y1={center} x2={x} y2={y} stroke="var(--rule)" strokeWidth="1" opacity={0.45} />
                   <circle cx={x} cy={y} r={active ? 18 : 14} fill={isActive ? (accented ? 'var(--accent)' : 'var(--accent-2)') : 'var(--surface-subtle)'} stroke={active ? 'var(--accent-3)' : 'var(--rule-strong)'} strokeWidth={active ? 3 : accented ? 2 : 1.5} />
                   <text x={x} y={y + 4} textAnchor="middle" fontSize="10" fill={isActive ? '#111' : 'var(--text-faint)'}>{index + 1}</text>
+                  <circle cx={x} cy={y} r={22} fill="transparent" />
                 </g>
               )
             })}
