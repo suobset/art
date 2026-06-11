@@ -6,6 +6,7 @@ import { CellularAutomataDemo } from './CellularAutomataDemo'
 import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
 import { KineticTypeDemo } from './KineticTypeDemo'
+import { MurmurationDemo } from './MurmurationDemo'
 import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
 import { PhyllotaxisDemo } from './PhyllotaxisDemo'
 import { PixelConstraintDemo } from './PixelConstraintDemo'
@@ -826,6 +827,56 @@ export const demos: DemoDefinition[] = [
         'This demo actually uses WebGL — not a canvas approximation.',
         'Every shader is human-readable inside the source file; you can copy/paste them into a shader playground.',
         'Nothing is sent to a network service; the GPU does the work locally.',
+      ],
+    },
+  },
+  {
+    id: 'murmuration',
+    title: demoLabels.murmuration,
+    shortDescription: 'Up to six hundred boids steered by separation, alignment, and cohesion. Your cursor is either predator or attractor.',
+    whyArt: 'A crowd does not need a conductor to compose itself.',
+    tags: ['flocking', 'emergence', 'motion'],
+    component: MurmurationDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/MurmurationDemo.tsx',
+        href: `${repoRoot}/src/demos/MurmurationDemo.tsx`,
+      },
+      overview: 'Reynolds boids: each agent looks at its nearby neighbors and applies three small forces — push away from anyone too close, steer toward the average heading, drift toward the local center of mass. The flock is what emerges from these three local rules repeated everywhere.',
+      explanation: [
+        'A naive boids simulation is O(n²), which gets expensive past a few hundred agents. This piece tucks each frame\'s boids into a spatial hash so each one only checks its own cell and the eight neighbors — fast enough to run hundreds without dropping below sixty frames per second.',
+        'Multiple flocks share the canvas but only listen to their own kind. They will weave through each other without alignment or cohesion, but if you switch the pointer to attract, both flocks are drawn to the same focus.',
+        'The pointer is implemented as a soft force, not a hard constraint. Attract gently pulls boids in; flee pushes them away. Silent removes the cursor from the math entirely.',
+      ],
+      parameters: [
+        { name: 'palette', meaning: 'Which colors mark each flock. Pure decoration; the math is unchanged.' },
+        { name: 'pointer', meaning: 'How the cursor influences the flock — attract, flee, or be silent.' },
+        { name: 'boids', meaning: 'Total agents across all flocks.' },
+        { name: 'flocks', meaning: 'How many independent groups exist. Each only listens to its own.' },
+        { name: 'separation / alignment / cohesion', meaning: 'The three classical Reynolds weights. Pushing one up while another stays low changes the personality of the flock.' },
+        { name: 'trail fade', meaning: 'Opacity of the previous frame. Low fade leaves long murmuration ribbons.' },
+      ],
+      snippets: [
+        {
+          title: 'Three forces, computed locally',
+          code: `for (const other of neighbors) {\n  if (other.flock === b.flock) {\n    alignSum += other.velocity\n    cohSum += other.position\n  }\n  if (distance < separationRadius) {\n    sep -= (other.position - b.position).normalized()\n  }\n}`,
+          note: 'No bird has a name. No bird knows the shape of the flock. The shape is a side effect of every bird trying to obey the same three rules.',
+        },
+        {
+          title: 'A spatial hash keeps it tractable',
+          code: `const cx = Math.floor(b.x / cellSize)\nconst cy = Math.floor(b.y / cellSize)\ngrid[cy * cols + cx].push(i)`,
+          note: 'Every frame, the boids are tossed into a grid. Each cell only has to consider its own bucket plus the surrounding ones — bringing the cost from O(n²) to roughly O(n).',
+        },
+        {
+          title: 'The cursor is a soft force',
+          code: `const strength = (1 - dist / 320) * 0.42 * (pointerMode === 'flee' ? -1 : 1)\nax += (dx / dist) * strength\nay += (dy / dist) * strength`,
+          note: 'There is no hard constraint and no path-following. The boids only know that a force exists nearby; whether to obey it is governed by every other force on them at the same moment.',
+        },
+      ],
+      tryThis: [
+        'Drop separation to zero and watch the flock collapse into a single dot — alignment alone is not enough to keep them apart.',
+        'Run two flocks with the pointer set to attract; both will overlap and unfold like braided ribbons.',
+        'Switch to flee and circle a flock from the outside; it will reshape itself the way real starlings do around a hawk.',
       ],
     },
   },

@@ -16,4 +16,5 @@ export const demoLabels = {
   attractor: 'phase space cosmonaut',
   pond: 'a pond remembers every touch',
   prism: 'a small cathedral of light',
+  murmuration: 'murmuration without a conductor',
 }
