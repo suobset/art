@@ -12,4 +12,5 @@ export const demoLabels = {
   diffusion: 'chemistry as draftsman',
   cosmos: 'phyllotaxis cosmos',
   lens: 'a camera that reads the room',
+  spectrum: 'drone made visible',
 }

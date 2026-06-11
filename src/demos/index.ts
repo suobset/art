@@ -13,6 +13,7 @@ import { RecursiveGardenDemo } from './RecursiveGardenDemo'
 import { ShaderWithoutShadersDemo } from './ShaderWithoutShadersDemo'
 import { SortingChoreographyDemo } from './SortingChoreographyDemo'
 import { SourceRemixDemo } from './SourceRemixDemo'
+import { SpectrumDemo } from './SpectrumDemo'
 
 const repoRoot = 'https://github.com/suobset/art/blob/main'
 
@@ -619,6 +620,56 @@ export const demos: DemoDefinition[] = [
         'The webcam stream is processed entirely in this browser tab.',
         'Nothing is uploaded to a server, sent to an AI service, or persisted between sessions.',
         'Stopping the camera releases the device so the indicator light turns off immediately.',
+      ],
+    },
+  },
+  {
+    id: 'spectrum',
+    title: demoLabels.spectrum,
+    shortDescription: 'A breathing chord of detuned oscillators plays through an opening filter. Its FFT becomes the picture.',
+    whyArt: 'Sound has a shape; the spectrum is one of its honest portraits.',
+    tags: ['audio', 'spectrum', 'drone'],
+    component: SpectrumDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/SpectrumDemo.tsx',
+        href: `${repoRoot}/src/demos/SpectrumDemo.tsx`,
+      },
+      overview: 'A small ensemble of oscillators plays the notes of a chord. Each voice has a slow LFO modulating its volume and a second oscillator pulling its pitch around slightly, so the drone never sits still. A shared low-pass filter sets the brightness. An AnalyserNode reads the master mix and turns it into the picture.',
+      explanation: [
+        'There is no audio file. Every sample you hear is generated in real time by the Web Audio API. The chord is just a list of MIDI numbers converted to frequencies.',
+        'Brightness moves the cutoff of a low-pass filter from a muffled 200 Hz up to about 6 kHz. Drift controls how aggressively the detune and amplitude LFOs wander.',
+        'The visual is the audio. A 2048-point FFT (Analyser) yields 1024 magnitude bins per frame. The ribbon mode stacks recent frames into a waterfall; starburst draws bins as radial lines; rings maps bin index to circle radius.',
+      ],
+      parameters: [
+        { name: 'chord', meaning: 'Which set of MIDI pitches the voices are tuned to.' },
+        { name: 'brightness', meaning: 'Cutoff of the master low-pass filter — sweeps the drone from foggy to glassy.' },
+        { name: 'drift', meaning: 'How wide and how fast each voice slowly detunes itself.' },
+        { name: 'density', meaning: 'Influences how aggressively the starburst extends rays for each FFT bin.' },
+        { name: 'volume', meaning: 'Master gain. Cross-faded smoothly so chord changes never click.' },
+        { name: 'visualization', meaning: 'Selects between waterfall (ribbon), radial rays (starburst), and concentric rings.' },
+      ],
+      snippets: [
+        {
+          title: 'A voice is just a small graph',
+          code: `osc.connect(filter)\nfilter.connect(gain)\ngain.connect(pan)\npan.connect(master)\nosc.start()`,
+          note: 'Each note is its own oscillator, with its own LFO modulating its gain. Drone music is patience plus addition.',
+        },
+        {
+          title: 'Pulling pitches apart with a second oscillator',
+          code: `const detuneGain = ctx.createGain()\ndetuneGain.gain.value = 1.5 + drift * 5\ndetune.connect(detuneGain)\ndetuneGain.connect(osc.detune)`,
+          note: 'Audio-rate modulation of detune produces the swarming, slightly out-of-tune feel that makes drones feel alive instead of synthesized.',
+        },
+        {
+          title: 'The picture is the spectrum',
+          code: `const bins = new Uint8Array(analyser.frequencyBinCount)\nanalyser.getByteFrequencyData(bins)\nhistory.push(bins.slice(0, 256))\nif (history.length > 96) history.shift()`,
+          note: 'There is no separate visualizer. The same numbers that describe the sound describe the painting.',
+        },
+      ],
+      tryThis: [
+        'Start on cmaj9 with brightness at 0.2 and slowly walk it to 1.0 — the chord opens like a door.',
+        'Switch chord while the drone is playing; the cross-fade keeps the moment without a click.',
+        'Compare ribbon and rings — both are reading the same FFT, just laid out differently.',
       ],
     },
   },
