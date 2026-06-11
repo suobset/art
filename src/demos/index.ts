@@ -10,6 +10,7 @@ import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
 import { PhyllotaxisDemo } from './PhyllotaxisDemo'
 import { PixelConstraintDemo } from './PixelConstraintDemo'
 import { PondDemo } from './PondDemo'
+import { PrismDemo } from './PrismDemo'
 import { ReactionDiffusionDemo } from './ReactionDiffusionDemo'
 import { RecursiveGardenDemo } from './RecursiveGardenDemo'
 import { ShaderWithoutShadersDemo } from './ShaderWithoutShadersDemo'
@@ -772,6 +773,59 @@ export const demos: DemoDefinition[] = [
         'Switch to still water, drop one pebble in the center, and watch the reflection patterns form an interference figure.',
         'Drag a slow curve across the surface and try to make the wake last longer by raising the surface tension.',
         'Compare rain and storm at the same damping — storm tips the pond toward chaos within a few seconds.',
+      ],
+    },
+  },
+  {
+    id: 'prism',
+    title: demoLabels.prism,
+    shortDescription: 'Real GLSL fragment shaders rendered to a fullscreen quad: aurora, fluid noise, raymarched gyroid cathedral, and a Julia glassmind.',
+    whyArt: 'The image is computed once per pixel, sixty times a second — by the GPU.',
+    tags: ['webgl', 'glsl', 'light'],
+    component: PrismDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/PrismDemo.tsx',
+        href: `${repoRoot}/src/demos/PrismDemo.tsx`,
+      },
+      overview: 'This piece is the inverse of "light from arithmetic". Instead of pretending to be a shader from JavaScript, every visible pixel really is computed by a shader running on the GPU. Four different fragment programs are bundled, each writing color into the same fullscreen quad.',
+      explanation: [
+        'The vertex shader does almost nothing — it just draws two triangles that cover the entire canvas. All the visual work happens in the fragment shader, which runs once per pixel.',
+        'Four uniforms feed each shader: resolution, time, pointer, and two slider-controlled scalars (intensity and complexity). The same uniform names mean each shader can ignore the controls it does not care about.',
+        'Aurora layers fractal Brownian noise into a ribbon and a halo. Fluid is a stack of rotated sinusoids modulating each other. Cathedral raymarches a gyroid-clipped sphere with shading and a glow accumulator. Glassmind iterates a Julia set every frame to a different complex parameter.',
+      ],
+      parameters: [
+        { name: 'shader', meaning: 'Which fragment program is uploaded to the GPU. Switching recompiles and rebinds uniforms.' },
+        { name: 'intensity', meaning: 'A scalar each shader uses for glow, contact, or highlight strength.' },
+        { name: 'complexity', meaning: 'A second scalar that increases octaves of noise, lattice frequency, or zoom depth.' },
+        { name: 'time scale', meaning: 'Multiplies the time uniform. Setting it to 0 freezes the picture.' },
+      ],
+      snippets: [
+        {
+          title: 'A fragment program is a function from pixel to color',
+          code: `void main() {\n  vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / min(u_resolution.x, u_resolution.y);\n  // ... compute color from uv, u_time, u_pointer ...\n  gl_FragColor = vec4(color, 1.0);\n}`,
+          note: 'There is no central scene graph. Each pixel asks "what should I be?" and answers itself.',
+        },
+        {
+          title: 'Raymarching a gyroid',
+          code: `for (int i = 0; i < 64; i++) {\n  vec3 hit = ro + rd * t;\n  float d = map(hit);\n  glow += 0.012 / (0.01 + d * d);\n  if (d < 0.001) { found = true; break; }\n  t += d * 0.8;\n}`,
+          note: 'Raymarching steps along the camera ray, asking the distance field how close it is. The smaller the step, the closer the surface — and the more glow accumulates near it.',
+        },
+        {
+          title: 'Compile, link, draw',
+          code: `const program = createProgram(gl, FRAGMENTS[shader])\ngl.useProgram(program)\ngl.uniform1f(uniforms.u_time, time)\ngl.drawArrays(gl.TRIANGLES, 0, 6)`,
+          note: 'The whole pipeline is six vertices and a handful of uniforms. Everything else is the GPU doing math at scale.',
+        },
+      ],
+      tryThis: [
+        'Set time scale to 0 on the cathedral shader, then move the pointer to compose a still photograph.',
+        'Switch to glassmind and slide complexity up; the Julia set zooms into self-similarity until your screen is a single curl.',
+        'Run aurora with intensity at 0 and slowly raise it; the halo is what lets the noise read as light.',
+      ],
+      distinctions: [
+        'This demo actually uses WebGL — not a canvas approximation.',
+        'Every shader is human-readable inside the source file; you can copy/paste them into a shader playground.',
+        'Nothing is sent to a network service; the GPU does the work locally.',
       ],
     },
   },

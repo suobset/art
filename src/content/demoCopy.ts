@@ -15,4 +15,5 @@ export const demoLabels = {
   spectrum: 'drone made visible',
   attractor: 'phase space cosmonaut',
   pond: 'a pond remembers every touch',
+  prism: 'a small cathedral of light',
 }
