@@ -1,6 +1,7 @@
 import { demoLabels } from '../content/demoCopy'
 import type { DemoDefinition } from '../lib/demoTypes'
 import { CameraLensDemo } from './CameraLensDemo'
+import { AttractorDemo } from './AttractorDemo'
 import { CellularAutomataDemo } from './CellularAutomataDemo'
 import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
@@ -670,6 +671,56 @@ export const demos: DemoDefinition[] = [
         'Start on cmaj9 with brightness at 0.2 and slowly walk it to 1.0 — the chord opens like a door.',
         'Switch chord while the drone is playing; the cross-fade keeps the moment without a click.',
         'Compare ribbon and rings — both are reading the same FFT, just laid out differently.',
+      ],
+    },
+  },
+  {
+    id: 'attractor',
+    title: demoLabels.attractor,
+    shortDescription: 'Lorenz, Aizawa, Halvorsen, Thomas, and Three-Scroll attractors integrated forward through phase space and orbited by hand.',
+    whyArt: 'Determinism does not have to be predictable.',
+    tags: ['3d', 'chaos', 'math'],
+    component: AttractorDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/AttractorDemo.tsx',
+        href: `${repoRoot}/src/demos/AttractorDemo.tsx`,
+      },
+      overview: 'Each attractor is a system of three coupled differential equations. There is no randomness inside the math. Two points that start a hair apart will follow trajectories that diverge dramatically — and yet both stay bound to the same beautiful shape.',
+      explanation: [
+        'Every frame, the piece advances each starting point by a small time step using forward Euler integration. The new position depends only on the current one, so each line is a memory of every decision the system has made.',
+        'A short warmup is run on the seed points before drawing so the visible curve is already on the attractor, not still falling toward it.',
+        'The 3D points are rotated by mouse drag and projected to 2D with the same tiny perspective trick the cosmos demo uses. The painter\'s algorithm and additive blending make denser regions glow.',
+      ],
+      parameters: [
+        { name: 'attractor', meaning: 'Which set of equations to integrate. Each one has its own ecology of shapes.' },
+        { name: 'streams', meaning: 'How many independent starting points are running at the same time, drawn in different palette tones.' },
+        { name: 'integration speed', meaning: 'How many time steps are advanced per animation frame. More steps unfurl the curve faster.' },
+        { name: 'trail fade', meaning: 'How quickly previous frames are veiled. Low fade keeps the whole history visible.' },
+        { name: 'line width', meaning: 'How heavy the stroke is. Thicker lines turn the trajectory into ribbon; thinner lines into vapor.' },
+        { name: 'palette', meaning: 'How each stream is colored. The math is identical regardless of the palette.' },
+      ],
+      snippets: [
+        {
+          title: 'Lorenz in three lines of math',
+          code: `const dx = sigma * (p.y - p.x)\nconst dy = p.x * (rho - p.z) - p.y\nconst dz = p.x * p.y - beta * p.z\nreturn { x: p.x + dx * dt, y: p.y + dy * dt, z: p.z + dz * dt }`,
+          note: 'These three equations are everything Lorenz needed to expose that weather is bounded but unpredictable. The whole butterfly emerges from iterating them.',
+        },
+        {
+          title: 'Trails are just stored history',
+          code: `for (let i = 0; i < iterations; i += 1) {\n  pt = step(attractor, pt, dt)\n  tail.push({ x: pt.x, y: pt.y, z: pt.z })\n  if (tail.length > 1400) tail.shift()\n}`,
+          note: 'The line you see is not a single object. It is a sliding window of remembered positions, drawn one short segment at a time.',
+        },
+        {
+          title: 'Two-axis rotation, no library',
+          code: `const y1 = sy * cosX - sz * sinX\nconst z1 = sy * sinX + sz * cosX\nconst x2 = sx * cosY + z1 * sinY\nconst z2 = -sx * sinY + z1 * cosY\nconst persp = fov / (z2 + fov)`,
+          note: 'The whole 3D pipeline. Cosine, sine, divide. No matrix library is needed to look around a chaotic system.',
+        },
+      ],
+      tryThis: [
+        'Run multiple streams on Lorenz and notice they all live on the same butterfly even though they never overlap exactly.',
+        'Slow the integration speed to 60 and watch a single trajectory cross itself again and again.',
+        'Switch to Thomas and crank trail fade down to 0.04 — the system writes a cursive web.',
       ],
     },
   },

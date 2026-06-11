@@ -13,4 +13,5 @@ export const demoLabels = {
   cosmos: 'phyllotaxis cosmos',
   lens: 'a camera that reads the room',
   spectrum: 'drone made visible',
+  attractor: 'phase space cosmonaut',
 }
