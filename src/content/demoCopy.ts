@@ -17,4 +17,5 @@ export const demoLabels = {
   pond: 'a pond remembers every touch',
   prism: 'a small cathedral of light',
   murmuration: 'murmuration without a conductor',
+  incantation: 'a room that reads itself aloud',
 }

@@ -5,6 +5,7 @@ import { AttractorDemo } from './AttractorDemo'
 import { CellularAutomataDemo } from './CellularAutomataDemo'
 import { FlowFieldDemo } from './FlowFieldDemo'
 import { GenerativePoetryDemo } from './GenerativePoetryDemo'
+import { IncantationDemo } from './IncantationDemo'
 import { KineticTypeDemo } from './KineticTypeDemo'
 import { MurmurationDemo } from './MurmurationDemo'
 import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
@@ -877,6 +878,60 @@ export const demos: DemoDefinition[] = [
         'Drop separation to zero and watch the flock collapse into a single dot — alignment alone is not enough to keep them apart.',
         'Run two flocks with the pointer set to attract; both will overlap and unfold like braided ribbons.',
         'Switch to flee and circle a flock from the outside; it will reshape itself the way real starlings do around a hawk.',
+      ],
+    },
+  },
+  {
+    id: 'incantation',
+    title: demoLabels.incantation,
+    shortDescription: 'The browser actually speaks a small generated poem aloud while the words choreograph themselves in time with the reading.',
+    whyArt: 'A program can read to you.',
+    tags: ['voice', 'language', 'choreography'],
+    component: IncantationDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/IncantationDemo.tsx',
+        href: `${repoRoot}/src/demos/IncantationDemo.tsx`,
+      },
+      overview: 'A small grammar generates a short poem from hand-written word banks. The browser\'s built-in SpeechSynthesis API reads it aloud while word-boundary events highlight each spoken word in the room. The piece tries to give code the temperament of a recital.',
+      explanation: [
+        'The poem itself is generated locally, the same way the older poetry room does it: an opener, a subject and verb, an optional modifier and place, sometimes a closer — pieces drawn from authored word lists scoped to a mood.',
+        'When you press recite, each line becomes a SpeechSynthesisUtterance. The voice is whichever local voice you pick. The piece subscribes to the utterance\'s onboundary event, which fires as each word is about to be spoken; that index is used to highlight and gently lift the current word.',
+        'Speech synthesis varies a lot between browsers and operating systems. The piece falls back gracefully: if no voices are available, the text still appears, and if SpeechSynthesis is missing entirely the room becomes a silent reading.',
+      ],
+      parameters: [
+        { name: 'mood', meaning: 'Switches the vocabulary bank — tide, forest, kiln, or silence.' },
+        { name: 'voice', meaning: 'Which local SpeechSynthesisVoice will speak. Mac and iOS have generous voice catalogs; some Linux browsers ship none.' },
+        { name: 'line count', meaning: 'How many lines the grammar should compose.' },
+        { name: 'rate', meaning: 'Speaking rate. Slower rates make the piece read like a meditation.' },
+        { name: 'pitch', meaning: 'Pitch multiplier; pairs naturally with rate to age or lighten the voice.' },
+      ],
+      snippets: [
+        {
+          title: 'A line is composed from word banks',
+          code: `const subject = pickOne(random, bank.subjects)\nconst verb = pickOne(random, bank.verbs)\nconst modifier = random() < 0.6 ? pickOne(random, bank.modifiers) : ''\nconst place = random() < 0.7 ? \`at \${pickOne(random, bank.places)}\` : ''`,
+          note: 'There is no language model here. The "writer" is the author of these small vocabularies and the grammar that arranges them.',
+        },
+        {
+          title: 'Synthesis reads it aloud',
+          code: `const utter = new SpeechSynthesisUtterance(line.text)\nutter.rate = rate\nutter.pitch = pitch\nutter.voice = chosenVoice\nwindow.speechSynthesis.speak(utter)`,
+          note: 'The Web Speech API is built into modern browsers and runs entirely on the user\'s device.',
+        },
+        {
+          title: 'Word boundaries drive the choreography',
+          code: `utter.onboundary = (event) => {\n  if (event.name !== 'word') return\n  let accumulated = 0\n  for (let wordIndex = 0; wordIndex < line.words.length; wordIndex += 1) {\n    const length = line.words[wordIndex].length + 1\n    if (event.charIndex < accumulated + length) {\n      setActiveWord(wordIndex)\n      return\n    }\n    accumulated += length\n  }\n}`,
+          note: 'The visual cue is not guessed; it is reported by the speech engine as it speaks. The room can move with the voice because the voice is telling it where it is.',
+        },
+      ],
+      tryThis: [
+        'Switch the mood from tide to kiln while paused; the words update, and the next recital pulls from a different vocabulary.',
+        'Drop the rate to 0.7 and the pitch to 0.85 to push the voice toward incantation.',
+        'Open the demo on two different browsers and compare which voices each one ships with — the same code becomes a different reading.',
+      ],
+      distinctions: [
+        'The poem and the speech are both produced locally — no network call.',
+        'No language model is involved; the words come from hand-written banks.',
+        'If the browser exposes no voices, the piece falls back to silent reading without crashing.',
       ],
     },
   },
