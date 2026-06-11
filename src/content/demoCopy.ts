@@ -9,4 +9,5 @@ export const demoLabels = {
   type: 'letters as bodies',
   pathfinding: 'the maze has opinions',
   source: 'change the spell',
+  diffusion: 'chemistry as draftsman',
 }

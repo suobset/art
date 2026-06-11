@@ -6,6 +6,7 @@ import { GenerativePoetryDemo } from './GenerativePoetryDemo'
 import { KineticTypeDemo } from './KineticTypeDemo'
 import { PathfindingPersonalityDemo } from './PathfindingPersonalityDemo'
 import { PixelConstraintDemo } from './PixelConstraintDemo'
+import { ReactionDiffusionDemo } from './ReactionDiffusionDemo'
 import { RecursiveGardenDemo } from './RecursiveGardenDemo'
 import { ShaderWithoutShadersDemo } from './ShaderWithoutShadersDemo'
 import { SortingChoreographyDemo } from './SortingChoreographyDemo'
@@ -463,6 +464,56 @@ export const demos: DemoDefinition[] = [
         },
       ],
       tryThis: ['Change one number at a time and notice how little source is needed to redirect the whole image.', 'Try a prime number for petals, then raise orbit.', 'Enter an invalid line on purpose and watch how the piece protects the editing experience.'],
+    },
+  },
+  {
+    id: 'diffusion',
+    title: demoLabels.diffusion,
+    shortDescription: 'Two chemicals push against each other on a tiny grid until coral, fingerprints, and zebra-stripes emerge from arithmetic alone.',
+    whyArt: 'A picture can grow itself if the conditions are honest.',
+    tags: ['simulation', 'chemistry', 'emergence'],
+    component: ReactionDiffusionDemo,
+    behindTheScenes: {
+      sourceFile: {
+        label: 'src/demos/ReactionDiffusionDemo.tsx',
+        href: `${repoRoot}/src/demos/ReactionDiffusionDemo.tsx`,
+      },
+      overview: 'This piece simulates two imaginary substances diffusing across a small grid. Substance B feeds on substance A and is removed at a steady rate. Those two opposing tendencies, repeated thousands of times per second, are enough to produce coral, mitotic blobs, fingerprint ridges, and zebra stripes.',
+      explanation: [
+        'The model is called Gray–Scott. It is one of the simplest reaction-diffusion systems that still produces a startling variety of life-like textures. The whole world fits into four numbers: feed, kill, and two diffusion rates.',
+        'Each cell looks at its neighbors using a small Laplacian stencil, mixes some neighbor concentration into its own, then applies the chemistry: A and 2B turn into 3B, plus a constant trickle of A from outside and a constant loss of B.',
+        'Painting into the canvas seeds extra B into the system. The pattern is not drawn — it grows from those introductions. That is why the marks you make often become channels, mouths, or pores rather than persistent strokes.',
+      ],
+      parameters: [
+        { name: 'preset', meaning: 'Switches between named regimes (coral, fingerprint, spots, mitosis, flow) which choose different feed and kill values.' },
+        { name: 'feed rate', meaning: 'How fast new substance A enters every cell. Higher values fill the world; lower values starve the reaction.' },
+        { name: 'kill rate', meaning: 'How fast substance B is removed. Tiny changes flip the world between thick blobs and delicate filaments.' },
+        { name: 'brush radius', meaning: 'How big a smear of B your pointer injects.' },
+        { name: 'steps per frame', meaning: 'How many simulation ticks happen between paints. More steps = denser texture for the same wall-clock time.' },
+        { name: 'palette', meaning: 'Maps the concentration of B to a color ramp; only changes the rendering, not the chemistry.' },
+      ],
+      snippets: [
+        {
+          title: 'The reaction in one line',
+          code: `aNext[i] = a[i] + dA * laplaceA - reaction + feed * (1 - a[i])\nbNext[i] = b[i] + dB * laplaceB + reaction - (kill + feed) * b[i]`,
+          note: 'These two lines are the whole physics. Everything else — coral, fingerprints, dots — is what they do when you iterate them across the grid.',
+        },
+        {
+          title: 'A nine-point Laplacian',
+          code: `const laplaceB =\n  b[i - 1] * 0.2 + b[i + 1] * 0.2 + b[above] * 0.2 + b[below] * 0.2 +\n  b[above - 1] * 0.05 + b[above + 1] * 0.05 +\n  b[below - 1] * 0.05 + b[below + 1] * 0.05 -\n  b[i]`,
+          note: 'A Laplacian asks "how different am I from my neighbors?" Diffusion is just the cell trying to be more like its surroundings.',
+        },
+        {
+          title: 'Painting injects a reactant',
+          code: `for (let yy = -radius; yy <= radius; yy += 1) {\n  for (let xx = -radius; xx <= radius; xx += 1) {\n    if (xx * xx + yy * yy > radius * radius) continue\n    field.b[(py + yy) * width + (px + xx)] = 0.95\n  }\n}`,
+          note: 'Painting does not draw the picture. It seeds the reaction. The texture that appears is the system\'s answer.',
+        },
+      ],
+      tryThis: [
+        'Pause the reaction and slowly drag a long line — then resume and watch the line become a tributary.',
+        'Switch from coral to mitosis with the same seed; the world will rearrange itself within seconds.',
+        'Drop kill rate while feed stays the same and notice the texture thickening into puddles.',
+      ],
     },
   },
 ]
